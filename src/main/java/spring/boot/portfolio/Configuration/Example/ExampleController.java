@@ -2,8 +2,12 @@ package spring.boot.portfolio.Configuration.Example;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class ExampleController {
@@ -39,5 +43,24 @@ public class ExampleController {
 
         return "redirect:/";
     }*/
+
+    @GetMapping(value = "/homeAction", params = "a")
+    public String submitA(Model model){
+        System.out.println("A");
+        model.addAttribute("msg", "ㅎㅇ");
+        return "example/submitTest";
+    }
+    @GetMapping(value = "/homeAction", params = "b")
+    public String submitB(){
+        System.out.println("B");
+        return "redirect:/";
+    }
+
+    @GetMapping("/example/{num}")
+    public String exampleTest(@PathVariable int num){
+        System.out.println(num);
+        return "redirect:/";
+    }
+
 
 }
