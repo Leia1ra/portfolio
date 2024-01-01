@@ -9,5 +9,15 @@
 <body>
 	<h1 th:text="${msg}"></h1>
 	<h1 th:utext="${msg}">ㅎㅇ</h1>
+	
+	<form action="/homeAction" method="get">
+		<label>
+			이름 : <input type="text" name="name">
+		</label>
+		<label>
+			나이 : <input type="text" name="age">
+		</label>
+		<input type="submit" value="전송">
+	</form>
 </body>
 </html>
