@@ -14,7 +14,6 @@ import java.util.List;
 public class DataService {
     // private final MongoTemplate mongoTemplate;
     private final DataRepository dataRepository;
-    MongoTemplate mt;
 
     public List<DataCollection> test(){
         DataCollection d = new DataCollection();
