@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Title</title>
+	<style>
+		.container{
+			margin: 10px 0;
+			padding: 10px;
+			border: 2px solid #ddd;
+		}
+		h1,h2,h3,h4,h5,h6{
+			margin: 0;
+		}
+	</style>
+</head>
+<body>
+<h1 class="container">타임리프의 주된 기능은 th:### 형식으로 입력함 </h1>
+<article class="container">
+	<h3>직접 문자 삽입</h3>
+	<div th:text="${msg}">속성 값에 지정된 값을 Sanitize 하여 출력합니다.</div>
+	<!-- <div th:utext="${sanitize}">속성 값에 지정된 값을 출력합니다.</div> -->
+	<div>Sanitize : 위험한 코드나 데이터를 변환 또는 제거하여 무력화 하는 것</div>
+	<hr>
+	
+	<h3>인라인 처리</h3>
+	<div>안녕하세요! [[${msg}]]입니다</div>
+	<hr>
+	
+	<h3>값 결합</h3>
+	<div th:text="'안녕하세요! ' + ${msg} + '입니다'">값 결합</div>
+	<div th:text="|안녕하세요! ${msg}입니다|"></div>
+</article>
+<article class="container">
+	<h3>지역 변수</h3>
+	<div th:with="a=1,b=2">
+		<span th:text="|${a} + ${b} = ${a+b}|"></span>
+	</div>
+</article>
+<article class="container">
+	<h3>비교와 등가</h3>
+	<div class="container">
+		<span th:text="1>=10">false</span>,
+		<span th:text="1<=10">true</span>,
+		<span th:text="1==10">false</span>,
+		<span th:text="1!=10">true</span>,
+		<span th:text="${msg}==thymeleaf">true</span>,
+		<span th:text="${msg}!=thymeleaf">false</span>
+	</div>
+	<hr>
+	
+	<h3>조건(삼항) 연산자</h3>
+	<div th:text="${msg}=='thymeleaf'?'thymeleaf':'JSP'"></div>
+	<hr>
+	
+	<h3>조건 분기</h3>
+	<div th:if="${msg}=='thymeleaf'">true : ㅎㅇ</div>
+	<div th:unless="${msg}=='JSP'">false : ㅂㅇ</div>
+	<hr>
+	
+	<h3>switch</h3>
+	<div th:switch="${msg}">
+		<span th:case="thymeleaf" th:text="|${msg} 입니다|"></span>
+		<span th:case="JSP" th:text="|구닥다리 ${msg} 입니다|"></span>
+		<span th:case="*">템플릿 엔진</span>
+	</div>
+</article>
+<article class="container">
+	<h3>참조</h3>
+	<div>
+		데이터를 결합한 객체 참조 ->
+		<span th:text="${mp.get('name')}"></span>
+		<span th:text="${mp['type']}"></span>
+	</div>
+	<hr>
+	<div th:object="${mp}">
+		th:object 참조 ->
+		<span th:text="*{get('name')}"></span>
+		<span th:text="*{get('type')}"></span>
+	</div>
+	<hr>
+	<form action="#" method="post" th:object="${hv}">
+		vo Object 참조
+		<input type="text" th:value="*{name}">
+		<input type="text" th:value="*{['age']}">
+	</form>
+	<hr>
+	<div>
+		<span th:text="${li[0]}"></span>
+		<span th:text="${li[1]}"></span>
+		<span th:text="${li[2]}"></span>
+		<span th:text="${li[3]}"></span>
+	</div>
+</article>
+
+</body>
+</html>

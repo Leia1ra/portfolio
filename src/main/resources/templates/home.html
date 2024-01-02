@@ -9,15 +9,17 @@
 <body>
 	<h1 th:text="${msg}"></h1>
 	<h1 th:utext="${msg}">ㅎㅇ</h1>
+	<a href="/thymeleaf">타임리프 실습</a>
+	
 	
 	<form action="/homeAction" method="get">
 		<label>
-			이름 : <input type="text" name="name">
+			이름 : <input type="text" name="name" value="test" th:value="${msg}">
 		</label>
 		<label>
 			나이 : <input type="text" name="age">
 		</label>
-		<input type="submit" value="버튼A" name="a">
+		<input type="submit" value="Thymeleaf" name="a">
 		<input type="submit" value="버튼B" name="b">
 	</form>
 </body>

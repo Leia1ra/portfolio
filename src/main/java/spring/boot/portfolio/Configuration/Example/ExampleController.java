@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 
 //컨트롤
 @Controller
@@ -64,5 +69,24 @@ public class ExampleController {
         return "redirect:/";
     }
 
+    @GetMapping("/thymeleaf")
+    public String thymeleaf(Model model){
+        model.addAttribute("msg", "thymeleaf");
+        model.addAttribute("sanitize", "<script>alert('ㅎㅇ')</script>");
 
+        Map map = new HashMap();
+        map.put("name", "Thymeleaf");
+        map.put("type", "template");
+        HomeVO hv = new HomeVO();
+        hv.setName("lee");
+        hv.setAge(26);
+        model.addAttribute("mp", map);
+        model.addAttribute("hv", hv);
+
+        List li = new ArrayList();
+        li.add("thy"); li.add("me"); li.add("le"); li.add("af");
+        model.addAttribute("li",li);
+
+        return "example/Thymeleaf";
+    }
 }
