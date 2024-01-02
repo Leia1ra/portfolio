@@ -1,4 +1,4 @@
-package spring.boot.portfolio.Model.PostModel;
+package spring.boot.portfolio.Model.CategoryModel.PostModel;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -6,7 +6,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.PersistenceCreator;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.*;
@@ -17,7 +16,7 @@ public class PostCollection {
     private String id;                    // 게시글 번호
     private String name;                // 게시글 이름
     private ArrayList<PostContent> contents; // 게시글 내용
-    private ArrayList<Long> comments_id;     // 댓글들 id
+    private ArrayList<String> comments_id;     // 댓글들 id
     private String category;            // 게시글 분류(필요 없을 지도 모름)
     @CreatedDate
     private Date write_day;             // 작성일

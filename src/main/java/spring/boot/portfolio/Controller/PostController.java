@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import spring.boot.portfolio.Model.PostModel.ContentMode;
-import spring.boot.portfolio.Model.PostModel.PostCollection;
-import spring.boot.portfolio.Model.PostModel.PostContent;
+import spring.boot.portfolio.Model.CategoryModel.PostModel.ContentMode;
+import spring.boot.portfolio.Model.CategoryModel.PostModel.PostCollection;
+import spring.boot.portfolio.Model.CategoryModel.PostModel.PostContent;
 import spring.boot.portfolio.Service.PostService;
 
 import java.util.ArrayList;

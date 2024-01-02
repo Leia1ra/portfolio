@@ -3,15 +3,20 @@ package spring.boot.portfolio.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import spring.boot.portfolio.Model.PostModel.PostCollection;
+import spring.boot.portfolio.Model.CategoryModel.CategoryCollection;
+import spring.boot.portfolio.Model.CategoryModel.PostModel.PostCollection;
+import spring.boot.portfolio.Repository.CategoryRepository;
 import spring.boot.portfolio.Repository.PostRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service @RequiredArgsConstructor
 public class PostService {
     @Autowired
     private final PostRepository postRepository;
+    @Autowired
+    private final CategoryRepository categoryRepository;
 
     public boolean postSave(PostCollection data){
         PostCollection result = postRepository.save(data);
@@ -30,6 +35,23 @@ public class PostService {
     public List<PostCollection> findByNameInclude(String name){
         List<PostCollection> temp = postRepository.findAll();
         return temp.stream().filter(r -> r.getName().contains(name)).toList();
+    }
+    private CategoryCollection findCategory(String name){
+        CategoryCollection failed = new CategoryCollection();
+        failed.setName(name);
+        return categoryRepository.findByName(name).orElse(failed);
+    }
+    public List<CategoryCollection> findCategoryAll(){
+        return categoryRepository.findAll();
+    }
+    public List<PostCollection> findByCategory(String name){
+        CategoryCollection category = findCategory(name);
+        ArrayList<PostCollection> result = new ArrayList<>();
+        category.getPosts_id().forEach(id -> {
+            result.add(findById(id));
+        });
+
+        return result;
     }
     public List<PostCollection> sortByDate(List<PostCollection> list, boolean ascending){
         if(ascending){
