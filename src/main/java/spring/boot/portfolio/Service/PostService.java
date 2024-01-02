@@ -46,9 +46,7 @@ public class PostService {
     public List<PostCollection> findByCategory(String name){
         CategoryCollection category = findCategory(name);
         ArrayList<PostCollection> result = new ArrayList<>();
-        category.getPosts_id().forEach(id -> {
-            result.add(findById(id));
-        });
+        category.getPosts_id().forEach(id -> result.add(findById(id)));
 
         return result;
     }
