@@ -20,6 +20,10 @@ public class PostController {
     @RequestMapping("/PostList") @ResponseBody
     public List<PostCollection> PrintList(String mode){
         if (mode == null) mode = "all";
+        if(mode.equals("include_name"))
+            return postService.findByNameInclude("ㅎㅇ");
+        else if(mode.equals("category"))
+            return postService.findByCategory("Test");
         return postService.findAll();
     }
     @RequestMapping("/PostInsertPage")
@@ -27,12 +31,13 @@ public class PostController {
         return "Post/PostInsert";
     }
     @RequestMapping("/PostInsertAction")
-    public String PostInsertAction(String post_name, String post_content){
+    public String PostInsertAction(String post_name, String post_content, String post_category){
         ArrayList<PostContent> contents = new ArrayList<>();
         contents.add(new PostContent(ContentMode.str, post_content));
 
         PostCollection temp = new PostCollection(post_name, contents, "test");
-        postService.postSave(temp);
+
+        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
         return "redirect:/PostInsertPage";
     }
 }
