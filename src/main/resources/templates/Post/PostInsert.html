@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!--뷰-->
+<head>
+    <meta charset="UTF-8">
+    <title>PostInsertPage</title>
+</head>
+<body>
+<hr />
+<form action="PostInsertAction" method="get">
+    <label>
+        <span>게시글 이름</span> <input type="text" name="post_name" id="post_name">
+    </label>
+    <label>
+        <span>게시글 내용</span> <textarea name="post_content" id="post_content" cols="30" rows="10"></textarea>
+    </label>
+    <input type="submit" value="게시글 추가">
+</form>
+</body>
+</html>
