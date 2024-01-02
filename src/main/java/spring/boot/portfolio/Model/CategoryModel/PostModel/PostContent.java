@@ -1,4 +1,4 @@
-package spring.boot.portfolio.Model.PostModel;
+package spring.boot.portfolio.Model.CategoryModel.PostModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
