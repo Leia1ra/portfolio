@@ -87,6 +87,11 @@ public class ExampleController {
         li.add("thy"); li.add("me"); li.add("le"); li.add("af");
         model.addAttribute("li",li);
 
+        List<HomeVO> hli = new ArrayList<HomeVO>();
+        hli.add(new HomeVO("lee",26));
+        hli.add(new HomeVO("hong",26));
+        hli.add(new HomeVO("kwak",27));
+        model.addAttribute("hli", hli);
         return "example/Thymeleaf";
     }
 }

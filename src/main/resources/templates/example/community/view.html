@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<div th:object="${detail}">
+	<div th:text="*{id}"></div>
+	<div th:text="*{title}"></div>
+	<div th:text="*{content}"></div>
+	<div th:text="*{writedate}"></div>
+	<div th:text="*{lastUpdate}"></div>
+</div>
+<a th:href="@{/community/write(id=${detail.id})}"></a>
+</body>
+</html>

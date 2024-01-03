@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		article{
+			width: 1000px;
+			margin: 0 auto;
+		}
+		.list{
+			display: flex;
+			flex-direction: row;
+			padding: 5px 0;
+			border-bottom: 1px solid #ddd;
+		}
+		.list>span{
+			width: 20%;
+		}
+		.list :first-child {
+			width: 60%;
+		}
+	</style>
+</head>
+<body>
+<a href="/community/write">글 작성하기</a>
+<article>
+	<h1>커뮤니티</h1>
+	<div th:each="list : ${list}" class="list">
+		<a th:href="@{/community/view(id=${list.id})}"  th:text="${list.title}"></a>
+		<span th:text="${list.writedate}"></span>
+		<span th:text="${list.lastUpdate}"></span>
+	</div>
+</article>
+</body>
+</html>

@@ -68,9 +68,10 @@
 <article class="container">
 	<h3>참조</h3>
 	<div>
-		데이터를 결합한 객체 참조 ->
+		Map 데이터를 결합한 객체 참조 ->
 		<span th:text="${mp.get('name')}"></span>
 		<span th:text="${mp['type']}"></span>
+
 	</div>
 	<hr>
 	<div th:object="${mp}">
@@ -86,12 +87,38 @@
 	</form>
 	<hr>
 	<div>
+		List Object 참조
 		<span th:text="${li[0]}"></span>
 		<span th:text="${li[1]}"></span>
 		<span th:text="${li[2]}"></span>
 		<span th:text="${li[3]}"></span>
 	</div>
 </article>
-
+<article class="container">
+	<h3>반복</h3>
+	<div th:each="member : ${hli}">
+		<div th:text="|${member.name} : ${member.age}|"></div>
+	</div>
+	<hr>
+	<div th:each="member, s : ${hli}" th:object="${member}" class="container">
+		<div th:text="|${s.index} : *{name} : *{age} |"></div>
+		count :   <span th:text="${s.count}">1부터 시작하는 인덱스</span>,
+		size :    <span th:text="${s.size}">반복처리하는 객체의 사이즈</span>,
+		current : <span th:text="${s.current}">현재 반복 요소의 객체를 표시</span>,
+		even :    <span th:text="${s.even}">현재 요소의 인덱스가 짝수(true)인지</span>,
+		odd :     <span th:text="${s.odd}">현재 요소의 인덱스가 홀수(true)인지</span>,
+		first :   <span th:text="${s.first}">첫번째 요소인지</span>,
+		last :    <span th:text="${s.last}">마지막 요소인지</span>
+	</div>
+</article>
+<article class="container">
+	<h3>유틸리티 객체 : ${#~~~}을 통하여 다양한 기능 제공</h3>
+</article>
+<article class="container">
+	<h3>fragment : 다른 Template 삽입하기</h3>
+	<div id="one" th:insert="example/fragment :: one">fragment 태그 자체를 가져옴</div>
+	<div id="two" th:include="example/fragment :: two">fragment 태그 안의 값만 가져옴</div>
+	<div id="three" th:replace="/example/fragment :: three">해당하는 div 조차 대체됨</div>
+</article>
 </body>
 </html>

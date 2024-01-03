@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+	<style>
+		*{
+			box-sizing: border-box;
+		}
+		form{
+			width: 500px;
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			padding: 10px;
+		}
+		input, textarea{
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+<h1>글 작성</h1>
+<!--<div th:text="${#request.contextPath}"></div>-->
+<form th:action="@{/community/writeAction}" method="post">
+	<label for="title">제목 :</label>
+	<input type="text" name="title" id="title">
+	
+	<label for="content">글 내용:</label>
+	<textarea name="content" id="content"></textarea>
+	<hr>
+	<input type="submit" value="제출하기">
+</form>
+</body>
+</html>
