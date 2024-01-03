@@ -30,7 +30,9 @@ public class PostService {
         return postRepository.findByName(name).orElse(PostCollection.emptyData());
     }
     public List<PostCollection> findAll(){
-        return postRepository.findAll();
+        var posts = postRepository.findAll();
+//        System.out.println(posts);
+        return posts;
     }
     public List<PostCollection> findByNameInclude(String name){
         List<PostCollection> temp = postRepository.findAll();
@@ -44,11 +46,10 @@ public class PostService {
         return categoryRepository.findAll();
     }
     public List<PostCollection> findByCategory(String name){
-        CategoryCollection category = findCategory(name);
-        ArrayList<PostCollection> result = new ArrayList<>();
-        category.getPosts_id().forEach(id -> result.add(findById(id)));
-
-        return result;
+        List<PostCollection> categorys = findAll().stream().filter(postCollection ->
+                postCollection.getCategory().equals(name)).toList();
+//        System.out.println(categorys);
+        return categorys;
     }
     public List<PostCollection> sortByDate(List<PostCollection> list, boolean ascending){
         if(ascending){
@@ -59,20 +60,20 @@ public class PostService {
         ).toList();
     }
     public CategoryCollection addCategory(String name){
-        CategoryCollection result = categoryRepository.save(new CategoryCollection(new ArrayList<>(), name));
+        CategoryCollection result = categoryRepository.save(new CategoryCollection(name));
         return result;
     }
-    public CategoryCollection CategoryInputPostId(String post_id, String name){
-        Optional<CategoryCollection> c = categoryRepository.findByName(name);
-        c.orElseThrow(() -> new TypeNotPresentException("존재하지 않는 카테고리에 접근하려 했습니다!", new Throwable()));
-        CategoryCollection category;
-        category = c.orElseGet(() -> addCategory(name));
-        ArrayList<String> ids = category.getPosts_id();
-        ids.add(post_id);
-        category.setPosts_id(ids);
-
-        return categoryRepository.save(category);
-    }
+//    public CategoryCollection CategoryInputPostId(String post_id, String name){
+//        Optional<CategoryCollection> c = categoryRepository.findByName(name);
+//        c.orElseThrow(() -> new TypeNotPresentException("존재하지 않는 카테고리에 접근하려 했습니다!", new Throwable()));
+//        CategoryCollection category;
+//        category = c.orElseGet(() -> addCategory(name));
+//        ArrayList<String> ids = category.getPosts_id();
+//        ids.add(post_id);
+//        category.setPosts_id(ids);
+//
+//        return categoryRepository.save(category);
+//    }
 //    public List<PostCollection> sortById(List<PostCollection> list, boolean ascending){
 //        if(ascending){
 //            return list.stream().sorted((o1, o2) -> Math.toIntExact(o1.getId() - o2.getId())).toList();
