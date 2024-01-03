@@ -41,9 +41,8 @@ public class PostController {
         ArrayList<PostContent> contents = new ArrayList<>();
         contents.add(new PostContent(ContentMode.str, post_content));
 
-        PostCollection temp = new PostCollection(post_name, contents, "test");
-
-        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
+        postService.postSave(new PostCollection(post_name, contents, post_category));
+//        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
         return "redirect:/PostInsertPage";
     }
 
