@@ -64,6 +64,7 @@ public class PostService {
     }
     public CategoryCollection CategoryInputPostId(String post_id, String name){
         Optional<CategoryCollection> c = categoryRepository.findByName(name);
+        c.orElseThrow(() -> new TypeNotPresentException("존재하지 않는 카테고리에 접근하려 했습니다!", new Throwable()));
         CategoryCollection category;
         category = c.orElseGet(() -> addCategory(name));
         ArrayList<String> ids = category.getPosts_id();

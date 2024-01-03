@@ -5,6 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>PostInsertPage</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        section{
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 <form action="PostInsertAction" method="get">
@@ -12,14 +18,45 @@
         <span>게시글 이름</span> <input type="text" name="post_name" id="post_name">
     </label>
     <label>
-        <span>카테고리</span> <input type="text" name="post_category" id="post_category">
+        <span>카테고리</span> <select name="post_category" id="set_new_category">
+            <option th:each="opt : ${categoryNames}" th:value="${opt}" th:text="${opt}"></option>
+            <option th:text="새로만들기" th:value="set_new_category"></option>
+        </select>
     </label>
     <hr />
     <br />
-    <label>
-        <span>게시글 내용</span> <textarea name="post_content" id="post_content" cols="30" rows="10"></textarea>
-    </label>
-    <input type="submit" value="게시글 추가">
+    <section>
+        <label>
+            <nav>게시글 내용</nav> <textarea name="post_content" id="post_content" cols="30" rows="10"></textarea>
+        </label>
+        <input type="submit" value="게시글 추가">
+    </section>
+    <section id="preview" style="border-left: 1px black solid; width: fit-content; height: fit-content;">
+
+    </section>
 </form>
+
+<script>
+    let select_category = document.querySelector("#set_new_category");
+    select_category.addEventListener("change", () => {
+        let changer = select_category;
+        console.log(changer);
+        if(changer.value === "set_new_category"){
+            let category_name = prompt("새로 만들 카테고리 이름을 정하세요");
+            if(category_name !== ""){
+                location.href = "http://"+location.host + "/AddCategory?category_name="+category_name;
+            }
+        }
+    });
+
+    let post_content = document.querySelector("#post_content");
+    let preview = document.querySelector("#preview");
+    post_content.addEventListener("change", () => {
+        let content = post_content;
+        let view = preview;
+        console.log(content.value);
+        view.innerHTML = marked.parse(content.value);
+    });
+</script>
 </body>
 </html>
