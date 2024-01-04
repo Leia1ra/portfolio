@@ -22,9 +22,15 @@ public class CommunityController {
 
     /*글 작성*/
     @RequestMapping(value = "/write", method = RequestMethod.GET)
-    public String write(@RequestParam(name = "id", required = false) String id){
-
-        return "example/community/write";
+    public String write(@RequestParam(name = "id", required = false) String id, Model model){
+        if(id != null){
+            Community c = new Community();
+            c.setId(id);
+            model.addAttribute("detail", service.communityView(c));
+            return "redirect:/community/view?="+id;
+        } else {
+            return "example/community/write";
+        }
     }
     @PostMapping("/writeAction")
     public String writeAction(Community community){
