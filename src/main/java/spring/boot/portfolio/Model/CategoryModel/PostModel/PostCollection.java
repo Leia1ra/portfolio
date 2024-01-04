@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.*;
 
+
 @Data @Document("PostData") @NoArgsConstructor
 public class PostCollection {
     @Id
@@ -18,11 +19,11 @@ public class PostCollection {
     private ArrayList<PostContent> contents; // 게시글 내용
 //    private ArrayList<String> comments_id;     // 댓글들 id
     private String category;            // 게시글 id
+    private String skill_id;            // 관련스킬 id 제안: 어떤 프로젝트냐에 따라서 관련된 스킬이 여러개일 수도 있으니 이걸 리스트로 하는건 어떰?
     @CreatedDate
     private Date write_day;             // 작성일
     @LastModifiedDate
     private Date update_day;            // 수정일
-
     @PersistenceCreator
     public PostCollection(String name, ArrayList<PostContent> contents, String category){
         this.name = name;
