@@ -3,21 +3,19 @@ package spring.boot.portfolio.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import spring.boot.portfolio.Model.CategoryModel.CategoryCollection;
+import spring.boot.portfolio.Model.CategoryModel.LangCollection;
 import spring.boot.portfolio.Model.CategoryModel.PostModel.PostCollection;
-import spring.boot.portfolio.Repository.CategoryRepository;
+import spring.boot.portfolio.Repository.LangRepository;
 import spring.boot.portfolio.Repository.PostRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service @RequiredArgsConstructor
 public class PostService {
     @Autowired
     private final PostRepository postRepository;
     @Autowired
-    private final CategoryRepository categoryRepository;
+    private final LangRepository categoryRepository;
 
     public PostCollection postSave(PostCollection data){
         return postRepository.save(data);
@@ -38,11 +36,11 @@ public class PostService {
         List<PostCollection> temp = postRepository.findAll();
         return temp.stream().filter(r -> r.getName().contains(name)).toList();
     }
-    private CategoryCollection findCategory(String name){
-        CategoryCollection failed = new CategoryCollection();
+    private LangCollection findCategory(String name){
+        LangCollection failed = new LangCollection();
         return categoryRepository.findByName(name).orElse(failed);
     }
-    public List<CategoryCollection> findCategoryAll(){
+    public List<LangCollection> findCategoryAll(){
         return categoryRepository.findAll();
     }
     public List<PostCollection> findByCategory(String name){
@@ -59,8 +57,8 @@ public class PostService {
         return list.stream().sorted((o1, o2) -> Math.toIntExact(o2.getWrite_day().getTime() - o1.getWrite_day().getTime())
         ).toList();
     }
-    public CategoryCollection addCategory(String name){
-        CategoryCollection result = categoryRepository.save(new CategoryCollection(name));
+    public LangCollection addCategory(String name){
+        LangCollection result = categoryRepository.save(new LangCollection(name));
         return result;
     }
 //    public CategoryCollection CategoryInputPostId(String post_id, String name){
