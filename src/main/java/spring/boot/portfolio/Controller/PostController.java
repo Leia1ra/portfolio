@@ -1,6 +1,7 @@
 package spring.boot.portfolio.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,9 @@ import java.util.List;
 public class PostController {
     @Autowired
     PostService postService;
+
+    @Value("${app.password}")
+    String password;
 
     @RequestMapping("/PostList") @ResponseBody
     public List<PostCollection> PrintList(String mode){
@@ -66,6 +70,11 @@ public class PostController {
     @RequestMapping("/AddSkill")
     public String AddSkill(String name, String description, int level){
         postService.saveSkill(name, description, level);
+        return "redirect:/PostInsertPage";
+    }
+    @RequestMapping("/Password")
+    public String Password(){
+        System.out.println(password);
         return "redirect:/PostInsertPage";
     }
 }
