@@ -5,6 +5,12 @@
 <head>
     <meta charset="UTF-8">
     <title>PostInsertPage</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        section{
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
 <form action="PostInsertAction" method="get">
@@ -12,14 +18,65 @@
         <span>게시글 이름</span> <input type="text" name="post_name" id="post_name">
     </label>
     <label>
-        <span>카테고리</span> <input type="text" name="post_category" id="post_category">
+        <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
+            <option th:text="새로만들기" th:value="set_new"></option>
+            <option th:each="opt : ${LangNames}" th:value="${opt}" th:text="${opt}"></option>
+            <option th:text="새로만들기" th:value="set_new"></option>
+        </select>
+        <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
+            <option th:text="새로만들기" th:value="set_new"></option>
+            <option th:each="opt : ${SkillNames}" th:value="${opt}" th:text="${opt}"></option>
+            <option th:text="새로만들기" th:value="set_new"></option>
+        </select>
     </label>
     <hr />
     <br />
-    <label>
-        <span>게시글 내용</span> <textarea name="post_content" id="post_content" cols="30" rows="10"></textarea>
-    </label>
-    <input type="submit" value="게시글 추가">
+    <section>
+        <label>
+            <nav>게시글 내용</nav> <textarea name="post_content" id="post_content" cols="30" rows="10"></textarea>
+        </label>
+        <input type="submit" value="게시글 추가">
+    </section>
+    <section id="preview" style="border-left: 1px black solid; width: fit-content; height: fit-content;">
+
+    </section>
 </form>
+
+<script>
+    let select_lang = document.querySelector("#set_new_lang");
+    select_lang.addEventListener("change", () => {
+        let changer = select_lang;
+        console.log(changer);
+        if(changer.value === "set_new"){
+            let name = prompt("새로 만들 언어 이름을 정하세요");
+            if(name !== null){
+                location.href = "http://"+location.host + "/AddLang?name="+name;
+            }
+        }
+    });
+
+    let select_skill = document.querySelector("#set_new_skill");
+    select_skill.addEventListener("change", () => {
+        let changer = select_skill;
+        console.log(changer);
+        if(changer.value === "set_new"){
+            let name = prompt("새로 만들 기술 이름을 정하세요");
+            let description = prompt("새로 만들 기술에 대한 설명을 적으세요");
+            let level = prompt("새로 만들 기술에 대한 당신의 실력을 레벨로 적으세요")
+            if(name !== "" && description !== "" && level >= 0){
+                location.href = "http://"+location.host + "/AddSkill?name="+name+"&description="+description+"&level="+level;
+            }
+        }
+    });
+
+    let post_content = document.querySelector("#post_content");
+    let preview = document.querySelector("#preview");
+    post_content.addEventListener("change", () => {
+        let content = post_content;
+        let view = preview;
+        console.log(content.value);
+        view.innerHTML = marked.parse(content.value);
+    });
+</script>
 </body>
 </html>

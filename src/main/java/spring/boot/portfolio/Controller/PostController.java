@@ -2,11 +2,15 @@ package spring.boot.portfolio.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import spring.boot.portfolio.Model.CategoryModel.LangCollection;
 import spring.boot.portfolio.Model.CategoryModel.PostModel.ContentMode;
 import spring.boot.portfolio.Model.CategoryModel.PostModel.PostCollection;
 import spring.boot.portfolio.Model.CategoryModel.PostModel.PostContent;
+import spring.boot.portfolio.Model.CategoryModel.SkillCollection;
 import spring.boot.portfolio.Service.PostService;
 
 import java.util.ArrayList;
@@ -23,21 +27,45 @@ public class PostController {
         if(mode.equals("include_name"))
             return postService.findByNameInclude("ㅎㅇ");
         else if(mode.equals("category"))
-            return postService.findByCategory("Test");
+            return postService.findByLang("Test");
         return postService.findAll();
     }
     @RequestMapping("/PostInsertPage")
-    public String PostInsertPage(){
+    public String PostInsertPage(Model model){
+        List<String> LangNames = postService.findLangAll().stream().map(
+                LangCollection::getName).toList();
+        List<String> SkillNames = postService.findSkillAll().stream().map(
+                SkillCollection::getName).toList();
+        model.addAttribute("LangNames", LangNames);
+        model.addAttribute("SkillNames", SkillNames);
+        //카테고리 이름 모음을 만들어서, 게시글 작성 시 존재하는 카테고리에 데이터를 추가할지 새로 만들지 선택 가능하게
         return "Post/PostInsert";
     }
     @RequestMapping("/PostInsertAction")
-    public String PostInsertAction(String post_name, String post_content, String post_category){
+    public String PostInsertAction(String post_name, String post_content,
+                                   @RequestParam(name = "post_lang")ArrayList<String> post_category,
+                                   @RequestParam(name = "post_skill")ArrayList<String> post_skill){
+
+        if(post_category.isEmpty() || post_skill.isEmpty()){
+            return "redirect:/PostInsertPage";
+        }
         ArrayList<PostContent> contents = new ArrayList<>();
         contents.add(new PostContent(ContentMode.str, post_content));
+//        System.out.println(post_category);
+//        System.out.println(post_skill);
+        postService.postSave(new PostCollection(post_name, contents, post_category, post_skill));
+//        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
+        return "redirect:/PostInsertPage";
+    }
 
-        PostCollection temp = new PostCollection(post_name, contents, "test");
-
-        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
+    @RequestMapping("/AddLang")
+    public String AddLang(String name){
+        postService.saveLang(name);
+        return "redirect:/PostInsertPage";
+    }
+    @RequestMapping("/AddSkill")
+    public String AddSkill(String name, String description, int level){
+        postService.saveSkill(name, description, level);
         return "redirect:/PostInsertPage";
     }
 }
