@@ -1,6 +1,5 @@
 package spring.boot.portfolio.Controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,16 +13,20 @@ public class HomeController {
     DataService service;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView home(){
+    public String home(){
+        return "home";
+    }
+
+    @RequestMapping(value = "/example", method = RequestMethod.GET)
+    public ModelAndView homeExample(){
         ModelAndView mav = new ModelAndView();
 
         /*List<DataCollection> list = service.test();
         for(DataCollection d : list){
             System.out.println(d.toString());
         }*/
-
         mav.addObject("msg","hello");
-        mav.setViewName("home");
+        mav.setViewName("homeExample");
         return mav;
     }
 

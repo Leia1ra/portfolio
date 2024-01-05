@@ -1,27 +1,14 @@
 <!DOCTYPE html>
-<!--타임리프 사용 선언-->
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
-	
 	<title>Title</title>
 </head>
 <body>
-	<h1 th:text="${msg}"></h1>
-	<h1 th:utext="${msg}">ㅎㅇ</h1>
-	<a href="/thymeleaf">타임리프 실습</a>
-	<a href="/community/">커뮤니티 실습</a>
-	
-	
-	<form action="/homeAction" method="get">
-		<label>
-			이름 : <input type="text" name="name" value="test" th:value="${msg}">
-		</label>
-		<label>
-			나이 : <input type="text" name="age">
-		</label>
-		<input type="submit" value="Thymeleaf" name="a">
-		<input type="submit" value="버튼B" name="b">
-	</form>
+<form action="/certify" method="post">
+	<input type="hidden" name="Id" value="admin">
+	<input type="password" name="Pw">
+	<input type="submit" value="제출하기">
+</form>
 </body>
 </html>
