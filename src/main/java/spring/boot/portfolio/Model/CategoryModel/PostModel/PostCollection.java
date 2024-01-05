@@ -16,20 +16,20 @@ public class PostCollection {
     @Id
     private String id;                    // 게시글 번호
     private String name;                // 게시글 이름
-    private ArrayList<PostContent> contents; // 게시글 내용
+    private List<PostContent> contents; // 게시글 내용
 //    private ArrayList<String> comments_id;     // 댓글들 id
-    private ArrayList<String> category;           // 게시글 id
-    private ArrayList<String> skill_id;           // 관련스킬 id 제안: 어떤 프로젝트냐에 따라서 관련된 스킬이 여러개일 수도 있으니 이걸 리스트로 하는건 어떰?
+    private List<String> lang_id;           // 게시글 id
+    private List<String> skill_id;           // 관련스킬 id 제안: 어떤 프로젝트냐에 따라서 관련된 스킬이 여러개일 수도 있으니 이걸 리스트로 하는건 어떰?
     @CreatedDate
     private Date write_day;             // 작성일
     @LastModifiedDate
     private Date update_day;            // 수정일
     @PersistenceCreator
-    public PostCollection(String name, ArrayList<PostContent> contents, ArrayList<String> category, ArrayList<String> skill_id){
+    public PostCollection(String name, ArrayList<PostContent> contents, ArrayList<String> lang_id, ArrayList<String> skill_id){
         this.name = name;
         this.contents = contents;
 //        this.comments_id = new ArrayList<>();
-        this.category = category;
+        this.lang_id = lang_id;
         this.skill_id = skill_id;
     }
 
@@ -37,7 +37,7 @@ public class PostCollection {
         PostCollection result = new PostCollection();
         result.id = "-1";
         result.name = "비어있는 게시글";
-        result.category = new ArrayList<>();
+        result.lang_id = new ArrayList<>();
         result.skill_id = new ArrayList<>();
         result.contents = new ArrayList<>();
 //        result.comments_id = new ArrayList<>();
