@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import spring.boot.portfolio.Model.CategoryModel.LangCollection;
 import spring.boot.portfolio.Model.CategoryModel.PostModel.ContentMode;
 import spring.boot.portfolio.Model.CategoryModel.PostModel.PostCollection;
@@ -25,14 +24,27 @@ public class PostController {
     @Value("${app.password}")
     String password;
 
-    @RequestMapping("/PostList") @ResponseBody
-    public List<PostCollection> PrintList(String mode){
+    @RequestMapping("/PostList") /*@ResponseBody*/
+    public String PrintList(Model model, String mode, String value){
         if (mode == null) mode = "all";
-        if(mode.equals("include_name"))
-            return postService.findByNameInclude("ㅎㅇ");
-        else if(mode.equals("category"))
-            return postService.findByLang("Test");
-        return postService.findAll();
+        List<PostCollection> postCollections;
+        switch (mode) {
+            case "include_name" -> postCollections = postService.findByNameInclude(value);
+            case "name" -> {
+                postCollections = new ArrayList<>();
+                postCollections.add(postService.findByName(value));
+            }
+            case "lang" -> postCollections = postService.findByLang(value);
+            case "skill" -> postCollections = postService.findBySkill(value);
+            case "id" -> {
+                postCollections = new ArrayList<>();
+                postCollections.add(postService.findById(value));
+            }
+            default -> postCollections = postService.findAll();
+        }
+
+        model.addAttribute("posts", postCollections);
+        return "Post/PostList";
     }
     @RequestMapping("/PostInsertPage")
     public String PostInsertPage(Model model){
