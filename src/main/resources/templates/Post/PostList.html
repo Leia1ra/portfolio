@@ -5,8 +5,25 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Title</title>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-
+	<section th:each="opt : ${posts}">
+		<span th:text="${opt.getName()}"></span>
+		<br>
+		<span th:text="${opt.getLang_id()}+' / '+${opt.getSkill_id()}"></span>
+		<hr />
+		<article th:each="o : ${opt.getContents()}">
+			<nav class="post_content" th:text="${o.getContent()}">
+			</nav>
+		</article>
+		<hr />
+	</section>
+<script>
+	let post_content = document.querySelectorAll(".post_content");
+	post_content.forEach(e => {
+		e.innerHTML = marked.parse(e.innerHTML);
+	});
+</script>
 </body>
 </html>
