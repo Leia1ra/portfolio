@@ -10,7 +10,6 @@ import spring.boot.portfolio.Repository.LangRepository;
 import spring.boot.portfolio.Repository.PostRepository;
 import spring.boot.portfolio.Repository.SkillRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service @RequiredArgsConstructor
@@ -35,9 +34,8 @@ public class PostService {
         return postRepository.findByName(name).orElse(PostCollection.emptyData());
     }
     public List<PostCollection> findAll(){
-        var posts = postRepository.findAll();
-//        System.out.println(posts);
-        return posts;
+        //        System.out.println(posts);
+        return postRepository.findAll();
     }
     public List<PostCollection> findByNameInclude(String name){
         List<PostCollection> temp = postRepository.findAll();
@@ -53,9 +51,8 @@ public class PostService {
     }
     public List<PostCollection> findByLang(String name){
         String find_id = findLang(name).getId();
-        List<PostCollection> posts = findAll().stream().filter(postCollection ->
+        return findAll().stream().filter(postCollection ->
                 !postCollection.getLang_id().stream().filter(str -> str.equals(find_id)).toList().isEmpty()).toList();
-        return posts;
     }
     private SkillCollection findSkill(String name){
         SkillCollection failed = new SkillCollection();
@@ -63,9 +60,8 @@ public class PostService {
     }
     public List<PostCollection> findBySkill(String name){
         String find_id = findSkill(name).getId();
-        List<PostCollection> posts = findAll().stream().filter(postCollection ->
+        return findAll().stream().filter(postCollection ->
                 !postCollection.getSkill_id().stream().filter(str -> str.equals(find_id)).toList().isEmpty()).toList();
-        return posts;
     }
     public List<PostCollection> sortByDate(List<PostCollection> list, boolean ascending){
         if(ascending){
@@ -76,12 +72,10 @@ public class PostService {
         ).toList();
     }
     public LangCollection saveLang(String name){
-        LangCollection result = langRepository.save(new LangCollection(name));
-        return result;
+        return langRepository.save(new LangCollection(name));
     }
     public SkillCollection saveSkill(String name, String description, int level){
-        SkillCollection result = skillRepository.save(new SkillCollection(name,description,level));
-        return result;
+        return skillRepository.save(new SkillCollection(name,description,level));
     }
 
     public void deletePostById(String id){
