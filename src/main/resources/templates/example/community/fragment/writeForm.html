@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<form th:action="@{/community/writeAction}" method="post" th:fragment="write">
+	<label for="title">제목 :</label>
+	<input type="text" name="title" id="title">
+	
+	<label for="content">글 내용:</label>
+	<textarea name="content" id="content"></textarea>
+	<hr>
+	<input type="submit" value="제출하기">
+</form>
+</html>

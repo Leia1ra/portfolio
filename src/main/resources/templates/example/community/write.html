@@ -22,20 +22,10 @@
 <body>
 <h1>글 작성</h1>
 <!--<div th:text="${#request.contextPath}"></div>-->
-<th:block th:switch="${detail == null}">
-	<th:block th:case="true">
-		<form th:action="@{/community/writeAction}" method="post">
-			<label for="title">제목 :</label>
-			<input type="text" name="title" id="title">
-			
-			<label for="content">글 내용:</label>
-			<textarea name="content" id="content"></textarea>
-			<hr>
-			<input type="submit" value="제출하기">
-		</form>
-	</th:block>
-	<th:block th:case="false">
-		<form th:action="@{/community/writeAction}" method="post" th:object="${detail}">
+<th:block th:switch="${write}">
+	<th:block th:case="true" th:insert="example/community/fragment/writeForm :: write"></th:block>
+	<th:block th:case="false" >
+		<form th:action="@{/community/writeAction}" method="post" th:object="${detail}" th:fragment="edit">
 			<input type="hidden" name="id" th:value="*{id}">
 			<label for="title">제목 :</label>
 			<input type="text" name="title" id="title" th:field="*{title}">

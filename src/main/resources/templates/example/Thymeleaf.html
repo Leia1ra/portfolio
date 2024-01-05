@@ -67,11 +67,22 @@
 </article>
 <article class="container">
 	<h3>참조</h3>
+	<form action="#">
+		vo Object 참조
+		<input type="text" th:value="${hv.name}">
+		<input type="text" th:value="${hv['age']}">
+	</form>
+	<form action="#" method="post" th:object="${hv}">
+		vo th:Object 참조
+		<input type="text" th:value="*{name}">
+		<input type="text" th:value="*{['age']}">
+	</form>
+	<hr>
+	
 	<div>
 		Map 데이터를 결합한 객체 참조 ->
 		<span th:text="${mp.get('name')}"></span>
 		<span th:text="${mp['type']}"></span>
-
 	</div>
 	<hr>
 	<div th:object="${mp}">
@@ -80,12 +91,7 @@
 		<span th:text="*{get('type')}"></span>
 	</div>
 	<hr>
-	<form action="#" method="post" th:object="${hv}">
-		vo Object 참조
-		<input type="text" th:value="*{name}">
-		<input type="text" th:value="*{['age']}">
-	</form>
-	<hr>
+	
 	<div>
 		List Object 참조
 		<span th:text="${li[0]}"></span>

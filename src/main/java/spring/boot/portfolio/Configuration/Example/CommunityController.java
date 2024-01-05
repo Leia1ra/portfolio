@@ -26,11 +26,12 @@ public class CommunityController {
         if(id != null){
             Community c = new Community();
             c.setId(id);
+            model.addAttribute("write",false);
             model.addAttribute("detail", service.communityView(c));
-            return "redirect:/community/view?="+id;
         } else {
-            return "example/community/write";
+            model.addAttribute("write", true);
         }
+        return "example/community/write";
     }
     @PostMapping("/writeAction")
     public String writeAction(Community community){
@@ -49,4 +50,11 @@ public class CommunityController {
         return "example/community/view";
     }
 
+    @GetMapping("/dummy")
+    public String dummy(@RequestParam(name = "gd") List<String> gd){
+        for(String g : gd){
+            System.out.println(g);
+        }
+        return "redirect:/";
+    }
 }

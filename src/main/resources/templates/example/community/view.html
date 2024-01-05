@@ -13,5 +13,15 @@
 	<div th:text="*{lastUpdate}"></div>
 </div>
 <a th:href="@{/community/write(id=${detail.id})}">수정</a>
+
+<hr>
+<form action="/community/dummy" method="get">
+	<select name="gd" id="" multiple>
+		<option value="q">1</option>
+		<option value="w">2</option>
+		<option value="e">3</option>
+	</select>
+	<input type="submit" value="">
+</form>
 </body>
 </html>
