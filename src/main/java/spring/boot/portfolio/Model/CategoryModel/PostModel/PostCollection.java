@@ -25,7 +25,7 @@ public class PostCollection {
     @LastModifiedDate
     private Date update_day;            // 수정일
     @PersistenceCreator
-    public PostCollection(String name, ArrayList<PostContent> contents, ArrayList<String> lang_id, ArrayList<String> skill_id){
+    public PostCollection(String name, List<PostContent> contents, List<String> lang_id, List<String> skill_id){
         this.name = name;
         this.contents = contents;
 //        this.comments_id = new ArrayList<>();
