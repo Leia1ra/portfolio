@@ -21,9 +21,6 @@ public class PostController {
     @Autowired
     PostService postService;
 
-    @Value("${app.password}")
-    String password;
-
     @RequestMapping("/PostList") /*@ResponseBody*/
     public String PrintList(Model model, String mode, String value){
         if (mode == null) mode = "all";
@@ -82,11 +79,6 @@ public class PostController {
     @RequestMapping("/AddSkill")
     public String AddSkill(String name, String description, int level){
         postService.saveSkill(name, description, level);
-        return "redirect:/PostInsertPage";
-    }
-    @RequestMapping("/Password")
-    public String Password(){
-        System.out.println(password);
         return "redirect:/PostInsertPage";
     }
 }

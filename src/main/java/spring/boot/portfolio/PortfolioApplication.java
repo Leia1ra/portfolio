@@ -5,9 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 
-@SpringBootApplication @EnableMongoAuditing @PropertySource("classpath:/app.properties")
+@SpringBootApplication @EnableMongoAuditing
 public class PortfolioApplication {
-
     public static void main(String[] args) {
         //여기서 개발자는 공동으로 이선왕, 곽병준, 홍도완이 진행합니다.
         SpringApplication.run(PortfolioApplication.class, args);
