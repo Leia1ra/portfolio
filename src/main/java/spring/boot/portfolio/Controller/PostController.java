@@ -1,7 +1,6 @@
 package spring.boot.portfolio.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,14 +14,15 @@ import spring.boot.portfolio.Service.PostService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-@Controller
+@Controller @RequestMapping("/Post")
 public class PostController {
     @Autowired
     PostService postService;
 
-    @Value("${app.password}")
-    String password;
+//    @Value("${app.password}")
+//    String password;
 
     @RequestMapping("/PostList") /*@ResponseBody*/
     public String PrintList(Model model, String mode, String value){
@@ -58,35 +58,56 @@ public class PostController {
         return "Post/PostInsert";
     }
     @RequestMapping("/PostInsertAction")
-    public String PostInsertAction(String post_name, String post_content,
-                                   @RequestParam(name = "post_lang")ArrayList<String> post_category,
-                                   @RequestParam(name = "post_skill")ArrayList<String> post_skill){
+    public String PostInsertAction(String post_name,
+                                   @RequestParam(name = "post_type")List<String> post_type,
+                                   @RequestParam(name = "post_content")List<String> post_content,
+                                   @RequestParam(name = "post_lang")List<String> post_category,
+                                   @RequestParam(name = "post_skill")List<String> post_skill){
 
         if(post_category.isEmpty() || post_skill.isEmpty()){
-            return "redirect:/PostInsertPage";
+            return "redirect:PostInsertPage";
         }
-        ArrayList<PostContent> contents = new ArrayList<>();
-        contents.add(new PostContent(ContentMode.str, post_content));
+        AtomicInteger count = new AtomicInteger();
+        List<PostContent> postContents = post_type.stream().map((t) -> {
+            PostContent p = new PostContent();
+            ContentMode m = ContentMode.str;
+            switch(t){
+                case "Text":
+                    m = ContentMode.str;
+                    break;
+                case "Img":
+                    m = ContentMode.img;
+                    break;
+                case "Link":
+                    m = ContentMode.link;
+                    break;
+            }
+            p.setMode(m);
+            p.setContent(post_content.get(count.get()));
+            count.addAndGet(1);
+            return p;
+        }).toList();
+
 //        System.out.println(post_category);
 //        System.out.println(post_skill);
-        postService.postSave(new PostCollection(post_name, contents, post_category, post_skill));
+        postService.postSave(new PostCollection(post_name, postContents, post_category, post_skill));
 //        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
-        return "redirect:/PostInsertPage";
+        return "redirect:PostInsertPage";
     }
 
     @RequestMapping("/AddLang")
     public String AddLang(String name){
         postService.saveLang(name);
-        return "redirect:/PostInsertPage";
+        return "redirect:PostInsertPage";
     }
     @RequestMapping("/AddSkill")
     public String AddSkill(String name, String description, int level){
         postService.saveSkill(name, description, level);
-        return "redirect:/PostInsertPage";
+        return "redirect:PostInsertPage";
     }
-    @RequestMapping("/Password")
-    public String Password(){
-        System.out.println(password);
-        return "redirect:/PostInsertPage";
-    }
+//    @RequestMapping("/Password")
+//    public String Password(){
+//        System.out.println(password);
+//        return "redirect:/PostInsertPage";
+//    }
 }

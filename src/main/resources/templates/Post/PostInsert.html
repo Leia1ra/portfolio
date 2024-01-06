@@ -10,6 +10,9 @@
         section{
             display: inline-block;
         }
+        .add,.up,.down{
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -21,25 +24,37 @@
         <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
             <option th:text="새로만들기" th:value="set_new"></option>
             <option th:each="opt : ${LangNames}" th:value="${opt}" th:text="${opt}"></option>
-            <option th:text="새로만들기" th:value="set_new"></option>
         </select>
         <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
             <option th:text="새로만들기" th:value="set_new"></option>
             <option th:each="opt : ${SkillNames}" th:value="${opt}" th:text="${opt}"></option>
-            <option th:text="새로만들기" th:value="set_new"></option>
         </select>
     </label>
-    <hr />
     <br />
-    <section>
-        <label>
-            <nav>게시글 내용</nav> <textarea name="post_content" id="post_content" cols="30" rows="10"></textarea>
-        </label>
-        <input type="submit" value="게시글 추가">
-    </section>
-    <section id="preview" style="border-left: 1px black solid; width: fit-content; height: fit-content;">
 
+    <section id="post_elements">
+        <article class="post_drag" draggable="true">
+            <hr draggable="false"/>
+            <article draggable="false" style="display: inline-block">
+                <label>
+                    <input type="text" readonly class="type_name" name="post_type"></input>
+                </label>
+                <label>
+                    <textarea name="post_content" class="post_content" cols="30" rows="10"></textarea>
+                </label>
+            </article>
+            <article class="preview" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false">
+
+            </article>
+            <br />
+<!--                <span class="up">👆 </span><span class="down"> 👇</span> <br />-->
+            <span class="add text" draggable="false">글 추가 </span>
+            <span class="add img" draggable="false"> 이미지 추가 </span>
+            <span class="add link" draggable="false"> 링크 추가 </span>
+        </article>
     </section>
+
+    <input type="submit" value="업로드">
 </form>
 
 <script>
@@ -69,14 +84,87 @@
         }
     });
 
-    let post_content = document.querySelector("#post_content");
-    let preview = document.querySelector("#preview");
-    post_content.addEventListener("change", () => {
-        let content = post_content;
-        let view = preview;
-        console.log(content.value);
-        view.innerHTML = marked.parse(content.value);
-    });
+    let post_element_copy = document.querySelector(".post_drag").cloneNode(true);
+    let post_elements = document.querySelector("#post_elements");
+    let drag_start;
+
+    const add_content = (post_element,post_content, preview)=>{
+        post_content.addEventListener("change", () => {
+            let content = post_content;
+            let view = preview;
+            console.log(content.value);
+            if(view.classList.contains("text_type")){
+                view.innerHTML = marked.parse(content.value);
+            }
+            else if(view.classList.contains("img_type")){
+                view.innerHTML = `<img src='${content.value}' alt="잘못된 이미지 링크입니다."/>`;
+            }
+            else if(view.classList.contains("link_type")){
+                view.innerHTML = `<a href='${content.value}' >${content.value}</a>>`;
+            }
+        });
+        let add_text = post_element.querySelector(".text");
+        let add_img = post_element.querySelector(".img");
+        let add_link = post_element.querySelector(".link");
+
+        // let up_btn = post_element.querySelector(".up");
+        // let down_btn = post_element.querySelector(".down");
+        add_text.addEventListener("click", () => {
+            let node = post_elements.appendChild(post_element_copy.cloneNode(true));
+            let temp_content = node.querySelector(".post_content");
+            let temp_preview = node.querySelector(".preview");
+            temp_preview.classList.add('text_type');
+            node.querySelector(".type_name").value="Text";
+            add_content(node,temp_content,temp_preview);
+        });
+        add_img.addEventListener("click", () => {
+            let node = post_elements.appendChild(post_element_copy.cloneNode(true));
+            let temp_content = node.querySelector(".post_content");
+            let temp_preview = node.querySelector(".preview");
+            temp_preview.classList.add('img_type');
+            node.querySelector(".type_name").value="Img";
+            add_content(node,temp_content,temp_preview);
+        });
+        add_link.addEventListener("click", () => {
+            let node = post_elements.appendChild(post_element_copy.cloneNode(true));
+            let temp_content = node.querySelector(".post_content");
+            let temp_preview = node.querySelector(".preview");
+            temp_preview.classList.add('link_type');
+            node.querySelector(".type_name").value="Link";
+            add_content(node,temp_content,temp_preview);
+        });
+
+        post_element.addEventListener("dragstart", (e)=>{
+            console.log("Dragstart");
+            drag_start = e.target;
+        })
+        post_element.addEventListener("dragenter", (e)=>{
+            let target = e.target;
+            console.log(target.className);
+            if(target.classList.contains("post_drag") && drag_start !== target){
+                console.log("바꾸기 시도");
+                let post_drag = drag_start;
+                post_element.insertAdjacentElement("afterend",post_drag);
+                // post_drag.insertAdjacentElement("afterend",target);
+            }
+        })
+        post_element.addEventListener("dragleave", (e)=>{
+            let target = e.target;
+            console.log(target.className);
+            if(target.classList.contains("post_drag") && drag_start !== target){
+                console.log("바꾸기 시도");
+                let post_drag = drag_start;
+                post_element.insertAdjacentElement("afterend",post_drag);
+                // post_drag.insertAdjacentElement("afterend",target);
+            }
+        })
+    }
+    document.querySelector(".preview").classList.add("text_type");
+    document.querySelector(".post_drag").querySelector(".type_name").value = "Text"
+    add_content(document.querySelector(".post_drag")
+        , document.querySelector(".post_content")
+        , document.querySelector(".preview"));
+
 </script>
 </body>
 </html>
