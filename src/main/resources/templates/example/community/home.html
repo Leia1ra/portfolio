@@ -24,6 +24,12 @@
 	</style>
 </head>
 <body>
+<h1 th:text="${session['hello']}"></h1>
+<span th:text="${param.hello}"></span>
+<span th:text="${#authentication.isAuthenticated()}"></span>
+<!--<span th:text="${}"></span>-->
+<!--<span th:text="${#request.getParameter('hello')}"></span>-->
+<!--<span th:text="${#httpServletRequest.getParameter('hello')}"></span>-->
 <a href="/community/write">글 작성하기</a>
 <article>
 	<h1>커뮤니티</h1>

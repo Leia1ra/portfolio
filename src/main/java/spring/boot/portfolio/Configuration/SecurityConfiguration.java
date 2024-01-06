@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                     .loginProcessingUrl("/certify")
                     .usernameParameter("Id")
                     .passwordParameter("Pw")
-                    .defaultSuccessUrl("/community/");
+                    .successHandler(new AuthSuccessHandler());
         });
         http.logout(httpSecurityLogoutConfigurer -> {
             httpSecurityLogoutConfigurer
