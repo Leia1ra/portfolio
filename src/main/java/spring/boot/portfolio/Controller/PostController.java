@@ -14,6 +14,7 @@ import spring.boot.portfolio.Service.PostService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller @RequestMapping("/Post")
@@ -47,36 +48,41 @@ public class PostController {
         return "Post/PostList";
     }
     @RequestMapping("/PostInsertPage")
-    public String PostInsertPage(Model model){
-        List<String> LangNames = postService.findLangAll().stream().map(
-                LangCollection::getName).toList();
-        List<String> SkillNames = postService.findSkillAll().stream().map(
-                SkillCollection::getName).toList();
-        model.addAttribute("LangNames", LangNames);
-        model.addAttribute("SkillNames", SkillNames);
+    public String PostInsertPage(Model model, String id){
+        List<LangCollection> Langs = postService.findLangAll();
+        List<SkillCollection> Skills = postService.findSkillAll();
+        model.addAttribute("Langs", Langs);
+        model.addAttribute("Skills", Skills);
+        if(id != null){
+            PostCollection post = postService.findById(id);
+            model.addAttribute("PostData", post);
+            model.addAttribute("PostStr", ContentMode.str);
+            model.addAttribute("PostImg", ContentMode.img);
+            model.addAttribute("PostLink", ContentMode.link);
+        }
         //카테고리 이름 모음을 만들어서, 게시글 작성 시 존재하는 카테고리에 데이터를 추가할지 새로 만들지 선택 가능하게
         return "Post/PostInsert";
     }
     @RequestMapping("/PostInsertAction")
     public String PostInsertAction(String post_name,
+                                   String id,
                                    @RequestParam(name = "post_type")List<String> post_type,
                                    @RequestParam(name = "post_content")List<String> post_content,
-                                   @RequestParam(name = "post_lang")List<String> post_category,
+                                   @RequestParam(name = "post_lang")List<String> post_lang,
                                    @RequestParam(name = "post_skill")List<String> post_skill){
 
-        if(post_category.isEmpty() || post_skill.isEmpty()){
+        if(post_lang.isEmpty() || post_skill.isEmpty()){
             return "redirect:PostInsertPage";
         }
+        AtomicBoolean is_somenail_img = new AtomicBoolean(false);
         AtomicInteger count = new AtomicInteger();
         List<PostContent> postContents = post_type.stream().map((t) -> {
             PostContent p = new PostContent();
             ContentMode m = ContentMode.str;
             switch(t){
-                case "Text":
-                    m = ContentMode.str;
-                    break;
                 case "Img":
                     m = ContentMode.img;
+                    is_somenail_img.set(true);
                     break;
                 case "Link":
                     m = ContentMode.link;
@@ -87,22 +93,32 @@ public class PostController {
             count.addAndGet(1);
             return p;
         }).toList();
-
-//        System.out.println(post_category);
+        if(is_somenail_img.get()){
+            //        System.out.println(post_category);
 //        System.out.println(post_skill);
-        postService.postSave(new PostCollection(post_name, postContents, post_category, post_skill));
+            PostCollection tempPost = new PostCollection(post_name, postContents, post_lang, post_skill);
+            if(id == null)
+                postService.postSave(tempPost);
+            else {
+                tempPost.setId(id);
+                tempPost.setWrite_day(postService.findById(id).getWrite_day());
+                postService.postSave(tempPost);
+            }
 //        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
+        }else{
+            System.out.println("섬네일이 없기 때문에 게시글을 등록할 수 없습니다.");
+        }
         return "redirect:PostInsertPage";
     }
 
     @RequestMapping("/AddLang")
-    public String AddLang(String name){
-        postService.saveLang(name);
+    public String AddLang(String name, String img){
+        postService.saveLang(name, img);
         return "redirect:PostInsertPage";
     }
     @RequestMapping("/AddSkill")
-    public String AddSkill(String name, String description, int level){
-        postService.saveSkill(name, description, level);
+    public String AddSkill(String name, String description, int level, String img){
+        postService.saveSkill(name, description, level, img);
         return "redirect:PostInsertPage";
     }
 //    @RequestMapping("/Password")
