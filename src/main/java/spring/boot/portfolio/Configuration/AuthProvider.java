@@ -40,7 +40,6 @@ public class AuthProvider implements AuthenticationProvider, UserDetails {
         System.out.println(getAuthorities().toString());
 
         if(Objects.equals(Id, "admin") && passwordEncoder.matches(Pw,password)){
-
             return new UsernamePasswordAuthenticationToken(Id, Pw, getAuthorities());
         } else {
             throw new BadCredentialsException("아이디 또는 비밀번호가 잘못 입력되었습니다.");

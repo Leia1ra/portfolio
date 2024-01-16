@@ -26,16 +26,18 @@ public class SecurityConfiguration {
         http.formLogin((httpSecurityFormLoginConfigurer) -> {
             httpSecurityFormLoginConfigurer
                     .loginPage("/")
-                    .loginProcessingUrl("/certify")
                     .usernameParameter("Id")
                     .passwordParameter("Pw")
-                    .successHandler(new AuthSuccessHandler());
+                    .successHandler(new AuthSuccessHandler())
+                    .loginProcessingUrl("/certify");
         });
         http.logout(httpSecurityLogoutConfigurer -> {
             httpSecurityLogoutConfigurer
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
-                    .invalidateHttpSession(true);
+                    .logoutSuccessHandler(new LogoutSuccessHandler())
+                    .invalidateHttpSession(true)
+                    .permitAll();
         });
         return http.build();
     }

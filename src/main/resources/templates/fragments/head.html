@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:fragment="Head">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>portfolio Admin</title>
+	<style>
+		*{
+			box-sizing: border-box;
+		}
+		body{
+			margin: 0;
+		}
+		#mainHeader{
+			height: 50px;
+			position: relative;
+			background: #EFF5F5;
+		}
+		#mainHeader>nav{
+			height: 50px;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+		}
+		#mainHeader>aside{
+			position: absolute;
+			height: 100%;
+			line-height: 50px;
+			top: 0;
+			right: 10px;
+		}
+		
+		#mainHeader a{
+			width: 100px;
+			text-align: center;
+			margin: 0 10px;
+			font-weight: bold;
+			text-decoration: none;
+			color: #497174;
+			filter: brightness(120%);
+			transition: 0.2s ease;
+		}
+		#mainHeader a:hover{
+			color: #EB6440;
+		}
+	</style>
+</th:block>
+
+<th:block th:fragment="Header">
+	<header id="mainHeader">
+		<nav>
+			<a href="/personal/">PERSONAL</a>
+			<a href="">SKILL</a>
+			<a href="">PROJECT</a>
+			<a href="">COMMENT</a>
+		</nav>
+		<aside>
+			<a th:href="@{/logout}" sec:authorize="isAuthenticated()">LOGOUT</a>
+		</aside>
+	</header>
+</th:block>
+
+</html>
