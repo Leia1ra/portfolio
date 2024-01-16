@@ -18,6 +18,11 @@ import java.util.Map;
 //컨트롤
 @Controller
 public class ExampleController {
+    @GetMapping("/homepage")
+    public String homePage(){
+        return "homeExample";
+    }
+
     @RequestMapping(value = "/homeAction", method = RequestMethod.GET)
     public String homeAction(HttpServletRequest req){
         String name = req.getParameter("name");
@@ -52,21 +57,24 @@ public class ExampleController {
     }*/
 
     @GetMapping(value = "/homeAction", params = "a")
-    public String submitA(Model model){
+    public String submitA(HomeVO vo, HttpServletRequest req){
+        System.out.println(req.getRequestURL());
         System.out.println("A");
-        model.addAttribute("msg", "ㅎㅇ");
-        return "example/submitTest";
+        System.out.println(vo.toString());
+        return "redirect:/homepage";
     }
-    @GetMapping(value = "/homeAction", params = "b")
-    public String submitB(){
+    @RequestMapping(value = "/homeAction", params = "b", method = RequestMethod.GET)
+    public String submit(HomeVO vo, HttpServletRequest req){
+        System.out.println(req.getRequestURL());
         System.out.println("B");
-        return "redirect:/";
+        System.out.println(vo.toString());
+        return "redirect:/homepage";
     }
 
     @GetMapping("/example/{num}")
     public String exampleTest(@PathVariable int num){
         System.out.println(num);
-        return "redirect:/";
+        return "redirect:homepage";
     }
 
     @GetMapping("/thymeleaf")

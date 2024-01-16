@@ -1,14 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-	<meta charset="UTF-8">
-	<title>Title</title>
+<th:block th:include="fragments/head.html :: Head"></th:block>
 </head>
 <body>
-<form th:action="@{/certify}" method="post">
-	<input type="hidden" name="Id" value="admin">
-	<input type="password" name="Pw">
-	<input type="submit" value="제출하기">
-</form>
+<th:block th:insert="fragments/head.html :: Header"></th:block>
+
+
+<th:block th:if="${#authorization.expression('isAuthenticated()')}">
+	<h1 th:text="${#authorization.getAuthentication().getAuthorities()}"></h1>
+</th:block>
+<th:block sec:authorize="!isAuthenticated()">
+	<form th:action="@{/certify}" method="post">
+		<input type="hidden" name="Id" value="admin">
+		<input type="password" name="Pw">
+		<input type="submit" value="제출하기">
+	</form>
+</th:block>
 </body>
 </html>
