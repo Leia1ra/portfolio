@@ -45,6 +45,24 @@
 		#mainHeader a:hover{
 			color: #EB6440;
 		}
+		html, body{
+			height: 100%;
+			margin: 0;
+		}
+		
+		#main{
+			max-width: 1200px;
+			min-width: 800px;
+			width: 75%;
+			min-height: calc(100% - 150px);
+
+			margin: 0 auto;
+		}
+		
+		#mainFooter{
+			background: #EFF5F5;
+			height: 100px;
+		}
 	</style>
 </th:block>
 
@@ -60,6 +78,13 @@
 			<a th:href="@{/logout}" sec:authorize="isAuthenticated()">LOGOUT</a>
 		</aside>
 	</header>
+</th:block>
+
+
+<th:block th:fragment="Footer">
+	<footer id="mainFooter">
+		본 사이트는 곽병준, 이선왕, 홍도완이 공동작업 하였습니다.
+	</footer>
 </th:block>
 
 </html>

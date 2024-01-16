@@ -2,21 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<th:block th:include="fragments/head.html :: Head"></th:block>
+	<th:block th:include="fragments/layout.html :: Head"></th:block>
 </head>
 <body>
-<th:block th:insert="fragments/head.html :: Header"></th:block>
-
-
-<th:block th:if="${#authorization.expression('isAuthenticated()')}">
-	<h1 th:text="${#authorization.getAuthentication().getAuthorities()}"></h1>
-</th:block>
-<th:block sec:authorize="!isAuthenticated()">
-	<form th:action="@{/certify}" method="post">
-		<input type="hidden" name="Id" value="admin">
-		<input type="password" name="Pw">
-		<input type="submit" value="제출하기">
-	</form>
-</th:block>
+	<th:block th:insert="fragments/layout.html :: Header"></th:block>
+	
+	<main id="main">
+		<th:block th:if="${#authorization.expression('isAuthenticated()')}">
+			<h1 th:text="${#authorization.getAuthentication().getAuthorities()}"></h1>
+		</th:block>
+		
+		<th:block sec:authorize="!isAuthenticated()">
+			<form th:action="@{/certify}" method="post">
+				<input type="hidden" name="Id" value="admin">
+				<input type="password" name="Pw">
+				<input type="submit" value="제출하기">
+			</form>
+		</th:block>
+	</main>
+	
+	<th:block th:insert="fragments/layout.html :: Footer"></th:block>
 </body>
 </html>
