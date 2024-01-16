@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 
 <!--뷰-->
 <head>
@@ -10,34 +10,83 @@
         section{
             display: inline-block;
         }
-        .add,.up,.down{
+        .add{
             cursor: pointer;
         }
     </style>
 </head>
 <body>
+<p>게시글 안에 들어가는 이미지는 언제나 720*720 크기의 사진이어야 합니다.</p>
 <form action="PostInsertAction" method="get">
-    <label>
-        <span>게시글 이름</span> <input type="text" name="post_name" id="post_name">
-    </label>
-    <label>
-        <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
-            <option th:text="새로만들기" th:value="set_new"></option>
-            <option th:each="opt : ${LangNames}" th:value="${opt}" th:text="${opt}"></option>
-        </select>
-        <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
-            <option th:text="새로만들기" th:value="set_new"></option>
-            <option th:each="opt : ${SkillNames}" th:value="${opt}" th:text="${opt}"></option>
-        </select>
+    <th:block th:switch="${PostData}">
+        <label th:case="${null}">
+            <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
+        </label>
+        <label th:case="*">
+            <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${PostData.getName()}"/>
+        </label>
+    </th:block>
+    <label th:switch="${PostData}">
+        <th:block th:case="${null}">
+            <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
+                <option th:text="새로만들기" th:value="set_new"></option>
+                <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
+            </select>
+            <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
+                <option th:text="새로만들기" th:value="set_new"></option>
+                <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
+            </select>
+        </th:block>
+        <th:block th:case="*">
+            <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
+                <option th:text="새로만들기" th:value="set_new"></option>
+                <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"
+                        th:selected="${PostData.getLang_id().contains(opt.getId())}"></option>
+            </select>
+            <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
+                <option th:text="새로만들기" th:value="set_new"></option>
+                <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"
+                        th:selected="${PostData.getSkill_id().contains(opt.getId())}"></option>
+            </select>
+        </th:block>
+
     </label>
     <br />
 
     <section id="post_elements">
-        <article class="post_drag" draggable="true">
+        <th:block th:if="${PostData != null}">
+            <input type="text" readonly name="id" hidden="hidden" th:value="${PostData.getId()}"/>
+            <article th:each="opt : ${PostData.getContents()}" class="post_drag" draggable="true">
+                <hr draggable="false"/>
+                <article draggable="false" style="display: inline-block">
+                    <label th:switch="${opt.getMode()}">
+                        <input th:case="${PostStr}" type="text" readonly class="type_name" name="post_type" value="Text"/>
+                        <input th:case="${PostImg}" type="text" readonly class="type_name" name="post_type" value="Img"/>
+                        <input th:case="${PostLink}" type="text" readonly class="type_name" name="post_type" value="Link"/>
+                    </label>
+                    <label>
+                        <textarea name="post_content" class="post_content" cols="30" rows="10" th:text="${opt.getContent()}"></textarea>
+                    </label>
+                </article>
+                <th:block th:switch="${opt.getMode()}">
+                    <article th:case="${PostStr}" class="preview text_type" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false"></article>
+                    <article th:case="${PostImg}" class="preview img_type" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false"></article>
+                    <article th:case="${PostLink}" class="preview link_type" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false"></article>
+                </th:block>
+
+                <br />
+                <!--                <span class="up">👆 </span><span class="down"> 👇</span> <br />-->
+                <span class="add text" draggable="false">글 추가 </span>
+                <span class="add img" draggable="false"> 이미지 추가 </span>
+                <span class="add link" draggable="false"> 링크 추가 </span>
+            </article>
+        </th:block>
+
+        <article class="post_drag main_post" draggable="true">
             <hr draggable="false"/>
             <article draggable="false" style="display: inline-block">
                 <label>
-                    <input type="text" readonly class="type_name" name="post_type"></input>
+                    <input type="text" readonly class="type_name" name="post_type"/>
                 </label>
                 <label>
                     <textarea name="post_content" class="post_content" cols="30" rows="10"></textarea>
@@ -53,7 +102,6 @@
             <span class="add link" draggable="false"> 링크 추가 </span>
         </article>
     </section>
-
     <input type="submit" value="업로드">
 </form>
 
@@ -64,8 +112,9 @@
         console.log(changer);
         if(changer.value === "set_new"){
             let name = prompt("새로 만들 언어 이름을 정하세요");
-            if(name !== null){
-                location.href = "http://"+location.host + "/AddLang?name="+name;
+            let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
+            if(name !== null && img !== null){
+                location.href = "http://"+location.host + "/Post/AddLang?name="+name+"&img="+img;
             }
         }
     });
@@ -77,14 +126,15 @@
         if(changer.value === "set_new"){
             let name = prompt("새로 만들 기술 이름을 정하세요");
             let description = prompt("새로 만들 기술에 대한 설명을 적으세요");
-            let level = prompt("새로 만들 기술에 대한 당신의 실력을 레벨로 적으세요")
-            if(name !== "" && description !== "" && level >= 0){
-                location.href = "http://"+location.host + "/AddSkill?name="+name+"&description="+description+"&level="+level;
+            let level = prompt("새로 만들 기술에 대한 당신의 실력을 레벨로 적으세요");
+            let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
+            if(name !== "" && description !== null && level >= 0 && img !== null){
+                location.href = "http://"+location.host + "/Post/AddSkill?name="+name+"&description="+description+"&level="+level+"&img="+img;
             }
         }
     });
 
-    let post_element_copy = document.querySelector(".post_drag").cloneNode(true);
+    let post_element_copy = document.querySelector(".main_post").cloneNode(true);
     let post_elements = document.querySelector("#post_elements");
     let drag_start;
 
@@ -97,7 +147,7 @@
                 view.innerHTML = marked.parse(content.value);
             }
             else if(view.classList.contains("img_type")){
-                view.innerHTML = `<img src='${content.value}' alt="잘못된 이미지 링크입니다."/>`;
+                view.innerHTML = `<img src='${content.value}' alt="잘못된 이미지 링크입니다." width="720px" height="720px" style="object-fit: contain"/>`;
             }
             else if(view.classList.contains("link_type")){
                 view.innerHTML = `<a href='${content.value}' >${content.value}</a>>`;
@@ -143,8 +193,7 @@
             console.log(target.className);
             if(target.classList.contains("post_drag") && drag_start !== target){
                 console.log("바꾸기 시도");
-                let post_drag = drag_start;
-                post_element.insertAdjacentElement("afterend",post_drag);
+                post_element.insertAdjacentElement("afterend",drag_start);
                 // post_drag.insertAdjacentElement("afterend",target);
             }
         })
@@ -153,18 +202,25 @@
             console.log(target.className);
             if(target.classList.contains("post_drag") && drag_start !== target){
                 console.log("바꾸기 시도");
-                let post_drag = drag_start;
-                post_element.insertAdjacentElement("afterend",post_drag);
+                post_element.insertAdjacentElement("afterend",drag_start);
                 // post_drag.insertAdjacentElement("afterend",target);
             }
         })
     }
-    document.querySelector(".preview").classList.add("text_type");
-    document.querySelector(".post_drag").querySelector(".type_name").value = "Text"
-    add_content(document.querySelector(".post_drag")
-        , document.querySelector(".post_content")
-        , document.querySelector(".preview"));
+    document.querySelector(".main_post").querySelector(".preview").classList.add("text_type");
+    document.querySelector(".main_post").querySelector(".type_name").value = "Text"
+    // add_content(document.querySelector(".post_drag")
+    //     , document.querySelector(".post_content")
+    //     , document.querySelector(".preview"));
+    document.querySelector(".main_post").classList.remove("main_post");
 
+    document.querySelectorAll(".post_drag").forEach(post => {
+        console.log("포스트 감지 후 이벤트 부여");
+        console.log(post);
+        console.log(post.querySelector(".post_content"));
+        console.log(post.querySelector(".preview"));
+       add_content(post, post.querySelector(".post_content"), post.querySelector(".preview"));
+    });
 </script>
 </body>
 </html>

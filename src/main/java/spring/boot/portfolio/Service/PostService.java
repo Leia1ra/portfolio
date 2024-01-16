@@ -71,11 +71,11 @@ public class PostService {
         return list.stream().sorted((o1, o2) -> Math.toIntExact(o2.getWrite_day().getTime() - o1.getWrite_day().getTime())
         ).toList();
     }
-    public LangCollection saveLang(String name){
-        return langRepository.save(new LangCollection(name));
+    public LangCollection saveLang(String name, String img){
+        return langRepository.save(new LangCollection(name, img));
     }
-    public SkillCollection saveSkill(String name, String description, int level){
-        return skillRepository.save(new SkillCollection(name,description,level));
+    public SkillCollection saveSkill(String name, String description, int level, String img){
+        return skillRepository.save(new SkillCollection(name,description,level,img));
     }
 
     public void deletePostById(String id){
@@ -92,12 +92,12 @@ public class PostService {
         return skillRepository.findAll();
     }
 
-//    public CategoryCollection CategoryInputPostId(String post_id, String name){
-//        Optional<CategoryCollection> c = categoryRepository.findByName(name);
+//    public LangCollection CategoryInputPostId(String post_id, String name){
+//        Optional<LangCollection> c = langRepository.findByName(name);
 //        c.orElseThrow(() -> new TypeNotPresentException("존재하지 않는 카테고리에 접근하려 했습니다!", new Throwable()));
-//        CategoryCollection category;
-//        category = c.orElseGet(() -> addCategory(name));
-//        ArrayList<String> ids = category.getPosts_id();
+//        LangCollection category;
+//        category = c.orElseGet(() -> saveLang(name));
+//        List<String> ids = category.getPosts_id();
 //        ids.add(post_id);
 //        category.setPosts_id(ids);
 //
