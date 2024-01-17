@@ -1,6 +1,8 @@
 package spring.boot.portfolio.Model.AboutMeModel;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 import java.util.Map;
 
-@Data
+@Data @AllArgsConstructor @NoArgsConstructor
 @Document("AboutMe")
 public class AboutMeCollection {
     @Id
@@ -19,20 +21,4 @@ public class AboutMeCollection {
     private List<String> email;       // 이메일
     private Map<String, String> link;   // 관련 링크(깃허브 등)
     private List<String> tag;   // 성격
-
-    @PersistenceCreator
-    public AboutMeCollection(
-            String name,
-            String end_name,
-            String phone,
-            List<String> email,
-            Map<String, String> link,
-            List<String> tag){
-        this.name = name;
-        this.end_name = end_name;
-        this.phone = phone;
-        this.link = link;
-        this.tag = tag;
-        this.email = email;
-    }
 }

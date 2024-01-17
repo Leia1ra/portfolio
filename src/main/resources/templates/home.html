@@ -1,26 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="ko">
 <head>
-	<th:block th:include="fragments/layout.html :: Head"></th:block>
+	<style>
+		#main{
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		#main>form{
+			margin: 0 auto 50px;
+			width: 400px;
+		}
+		#main>form *{
+			margin: 10px 0;
+		}
+		#main>form>input{
+			font-size: 1.25rem;
+			height: 40px;
+			width: 100%;
+			border: 2px solid #497174;
+			border-radius: 10px;
+			padding: 5px 10px;
+			outline: none;
+			background-color: #D6E4E5;
+			transition: 0.2s ease;
+		}
+		#main>form>input[name='Pw']:focus{
+			filter:brightness(120%);
+		}
+		#main>form>input:last-child{
+			background: #497174;
+			transition: 0.2s ease;
+			color: white;
+		}
+		#main>form>input:last-child:hover{
+			filter:brightness(120%);
+		}
+	</style>
 </head>
-<body>
-	<th:block th:insert="fragments/layout.html :: Header"></th:block>
-	
-	<main id="main">
+<!--	<th:block th:insert="fragments/layout.html :: Header"></th:block>-->
+	<main layout:fragment="content">
 		<th:block th:if="${#authorization.expression('isAuthenticated()')}">
 			<h1 th:text="${#authorization.getAuthentication().getAuthorities()}"></h1>
 		</th:block>
 		
 		<th:block sec:authorize="!isAuthenticated()">
 			<form th:action="@{/certify}" method="post">
+				<h1>portfolio 관리 페이지</h1>
 				<input type="hidden" name="Id" value="admin">
 				<input type="password" name="Pw">
-				<input type="submit" value="제출하기">
+				<input type="submit" value="Login">
 			</form>
 		</th:block>
 	</main>
 	
-	<th:block th:insert="fragments/layout.html :: Footer"></th:block>
-</body>
+<!--	<th:block th:insert="fragments/layout.html :: Footer"></th:block>-->
 </html>

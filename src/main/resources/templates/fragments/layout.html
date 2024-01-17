@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<th:block th:fragment="Head">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ko">
+<head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width">
 	<title>portfolio Admin</title>
@@ -57,16 +59,21 @@
 			min-height: calc(100% - 150px);
 
 			margin: 0 auto;
+			padding-top: 20px;
+			padding-bottom: 20px;
 		}
 		
 		#mainFooter{
 			background: #EFF5F5;
 			height: 100px;
+			padding: 10px;
+		}
+		#mainFooter{
+			text-align: center;
 		}
 	</style>
-</th:block>
-
-<th:block th:fragment="Header">
+</head>
+<body>
 	<header id="mainHeader">
 		<nav>
 			<a href="/personal/">PERSONAL</a>
@@ -78,13 +85,9 @@
 			<a th:href="@{/logout}" sec:authorize="isAuthenticated()">LOGOUT</a>
 		</aside>
 	</header>
-</th:block>
-
-
-<th:block th:fragment="Footer">
+	<th:block th:id="main" layout:fragment="content"></th:block>
 	<footer id="mainFooter">
-		본 사이트는 곽병준, 이선왕, 홍도완이 공동작업 하였습니다.
+		<div>본 사이트는 곽병준, 이선왕, 홍도완이 공동작업 하였습니다.</div>
 	</footer>
-</th:block>
-
+</body>
 </html>
