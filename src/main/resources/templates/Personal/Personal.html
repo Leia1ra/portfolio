@@ -3,9 +3,21 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <head>
-
+	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+	<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+	
 </head>
 <main layout:fragment="content">
-	<p th:text="~{fragments/layout.html}"></p>
+	<div id="editor"></div>
+	<script>
+		const Editor = toastui.Editor;
+		
+		const editor = new Editor({
+			el: document.querySelector('#editor'),
+			height: '600px',
+			initialEditType: 'markdown',
+			previewStyle: 'vertical'
+		});
+	</script>
 </main>
 </html>
