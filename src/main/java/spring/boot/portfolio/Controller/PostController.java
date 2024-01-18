@@ -6,16 +6,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import spring.boot.portfolio.Model.CategoryModel.LangCollection;
-import spring.boot.portfolio.Model.CategoryModel.PostModel.ContentMode;
+//import spring.boot.portfolio.Model.CategoryModel.PostModel.ContentMode;
 import spring.boot.portfolio.Model.CategoryModel.PostModel.PostCollection;
-import spring.boot.portfolio.Model.CategoryModel.PostModel.PostContent;
+//import spring.boot.portfolio.Model.CategoryModel.PostModel.PostContent;
 import spring.boot.portfolio.Model.CategoryModel.SkillCollection;
 import spring.boot.portfolio.Service.PostService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+//import java.util.concurrent.atomic.AtomicBoolean;
+//import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller @RequestMapping("/Post")
 public class PostController {
@@ -56,9 +56,9 @@ public class PostController {
         if(id != null){
             PostCollection post = postService.findById(id);
             model.addAttribute("PostData", post);
-            model.addAttribute("PostStr", ContentMode.str);
-            model.addAttribute("PostImg", ContentMode.img);
-            model.addAttribute("PostLink", ContentMode.link);
+//            model.addAttribute("PostStr", ContentMode.str);
+//            model.addAttribute("PostImg", ContentMode.img);
+//            model.addAttribute("PostLink", ContentMode.link);
         }
         //카테고리 이름 모음을 만들어서, 게시글 작성 시 존재하는 카테고리에 데이터를 추가할지 새로 만들지 선택 가능하게
         return "Post/PostInsert";
@@ -66,48 +66,46 @@ public class PostController {
     @RequestMapping("/PostInsertAction")
     public String PostInsertAction(String post_name,
                                    String id,
-                                   @RequestParam(name = "post_type")List<String> post_type,
-                                   @RequestParam(name = "post_content")List<String> post_content,
+                                   String post_thumbnail,
+//                                   @RequestParam(name = "post_type")List<String> post_type,
+//                                   @RequestParam(name = "post_content")List<String> post_content,
+                                   String post_content,
                                    @RequestParam(name = "post_lang")List<String> post_lang,
                                    @RequestParam(name = "post_skill")List<String> post_skill){
 
-        if(post_lang.isEmpty() || post_skill.isEmpty()){
+        if(post_lang.isEmpty() || post_skill.isEmpty() || post_thumbnail.isEmpty()){
             return "redirect:PostInsertPage";
         }
-        AtomicBoolean is_somenail_img = new AtomicBoolean(false);
-        AtomicInteger count = new AtomicInteger();
-        List<PostContent> postContents = post_type.stream().map((t) -> {
-            PostContent p = new PostContent();
-            ContentMode m = ContentMode.str;
-            switch(t){
-                case "Img":
-                    m = ContentMode.img;
-                    is_somenail_img.set(true);
-                    break;
-                case "Link":
-                    m = ContentMode.link;
-                    break;
-            }
-            p.setMode(m);
-            p.setContent(post_content.get(count.get()));
-            count.addAndGet(1);
-            return p;
-        }).toList();
-        if(is_somenail_img.get()){
-            //        System.out.println(post_category);
+//        AtomicInteger count = new AtomicInteger();
+//        List<PostContent> postContents = post_type.stream().map((t) -> {
+//            PostContent p = new PostContent();
+//            ContentMode m = ContentMode.str;
+//            switch(t){
+//                case "Img":
+//                    m = ContentMode.img;
+//                    is_somenail_img.set(true);
+//                    break;
+//                case "Link":
+//                    m = ContentMode.link;
+//                    break;
+//            }
+//            p.setMode(m);
+//            p.setContent(post_content.get(count.get()));
+//            count.addAndGet(1);
+//            return p;
+//        }).toList();
+//        System.out.println(post_category);
 //        System.out.println(post_skill);
-            PostCollection tempPost = new PostCollection(post_name, postContents, post_lang, post_skill);
-            if(id == null)
-                postService.postSave(tempPost);
-            else {
-                tempPost.setId(id);
-                tempPost.setWrite_day(postService.findById(id).getWrite_day());
-                postService.postSave(tempPost);
-            }
-//        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
-        }else{
-            System.out.println("섬네일이 없기 때문에 게시글을 등록할 수 없습니다.");
+        PostCollection tempPost = new PostCollection(post_name, post_thumbnail,post_content, post_lang, post_skill);
+        if(id == null)
+            postService.postSave(tempPost);
+        else {
+            tempPost.setId(id);
+            tempPost.setWrite_day(postService.findById(id).getWrite_day());
+            postService.postSave(tempPost);
         }
+//        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
+
         return "redirect:PostInsertPage";
     }
 
