@@ -7,25 +7,99 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Title</title>
-	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<style>
+		.post_element{
+			position: relative;
+			display: grid;
+			grid-template-columns: calc(100% - 10rem) 10rem;
+			height: 10rem;
+			border: #497174 1px solid;
+			align-content: center;
+			justify-content: space-between;
+			cursor: pointer;
+		}
+		.post_element > article{
+			width: 100%;
+			display: flex;
+			height: 10rem;
+		}
+		.post_element > article:hover{
+			transition: 0.3s;
+			background-color: #EB6440;
+		}
+		.thumbnail{
+			display: inline-block;
+		}
+		.post_info{
+			width: calc(100% - 10rem);
+			display: grid;
+			grid-row-gap: revert;
+			margin-left: 1rem;
+		}
+		.thumbnail{
+			display: inline-block;
+			width: 10rem;
+			height: 10rem;
+		}
+		.thumbnail > img{
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		.delete{
+			background: linear-gradient(to bottom, #497174, #EB6440);
+			color: black;
+		}
+		.delete:hover{
+			transition: 0.3s;
+			background: linear-gradient(to bottom, #EB6440, #497174);
+			color: #EFF5F5;
+		}
+	</style>
 </head>
 <body>
-	<section th:each="opt : ${posts}">
-		<span th:text="${opt.getName()}"></span>
-		<br>
-		<span th:text="${opt.getLang_id()}+' / '+${opt.getSkill_id()}"></span>
-		<hr />
-		<article th:each="o : ${opt.getContents()}">
-			<nav class="post_content" th:text="${o.getContent()}">
+<main layout:fragment="content">
+	<section th:each="opt : ${posts}" class="post_element">
+		<article>
+			<label>
+				<input class="id" type="hidden" readonly  th:value="${opt.getId()}"/>
+			</label>
+			<nav class="thumbnail">
+				<img th:src="${opt.getThumbnail()}" alt="헉! 썸네일을 불러올 수 없어요!"/>
+			</nav>
+			<nav class="post_info">
+				<p class="post_name" th:text="${opt.getName()}"></p>
+				<p class="post_category">
+					<th:block th:each="ol : ${opt.getLang_id()}">
+						<th:block th:each="lang : ${Langs}">
+							<span th:if="${ol == lang.getId()}" th:text="${lang.getName()} "></span>
+						</th:block>
+					</th:block>
+					<br/>
+					<th:block th:each="os : ${opt.getSkill_id()}">
+						<th:block th:each="skill : ${Skills}">
+							<span th:if="${os == skill.getId()}" th:text="${skill.getName()} "></span>
+						</th:block>
+					</th:block>
+				</p>
 			</nav>
 		</article>
-		<hr />
+		<nav class="delete">
+			<span>제거</span>
+		</nav>
 	</section>
-<script>
-	let post_content = document.querySelectorAll(".post_content");
-	post_content.forEach(e => {
-		e.innerHTML = marked.parse(e.innerHTML);
-	});
-</script>
+	<script>
+		const post_elements = document.querySelectorAll(".post_element");
+
+		post_elements.forEach(post => {
+			post.querySelector('article').addEventListener('click', ()=>{
+				location.href="http://"+location.host + '/Post/PostInsertPage?id=' + post.querySelector('.id').value;
+			});
+			post.querySelector(".delete").addEventListener('click', () => {
+				location.href = "http://"+location.host + '/Post/PostDeleteAction?id=' + post.querySelector('.id').value;
+			})
+		});
+	</script>
+</main>
 </body>
 </html>
