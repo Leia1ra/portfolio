@@ -29,6 +29,8 @@ public class PostController {
     public String PrintList(Model model, String mode, String value){
         if (mode == null) mode = "all";
         List<PostCollection> postCollections;
+        List<LangCollection> Langs = postService.findLangAll();
+        List<SkillCollection> Skills = postService.findSkillAll();
         switch (mode) {
             case "include_name" -> postCollections = postService.findByNameInclude(value);
             case "name" -> {
@@ -45,6 +47,8 @@ public class PostController {
         }
 
         model.addAttribute("posts", postCollections);
+        model.addAttribute("Langs", Langs);
+        model.addAttribute("Skills", Skills);
         return "Post/PostList";
     }
     @RequestMapping("/PostInsertPage")
@@ -118,6 +122,11 @@ public class PostController {
     public String AddSkill(String name, String description, int level, String img){
         postService.saveSkill(name, description, level, img);
         return "redirect:PostInsertPage";
+    }
+    @RequestMapping("/PostDeleteAction")
+    public String DeletePost(String id){
+        postService.deletePostById(id);
+        return "redirect:PostList";
     }
 //    @RequestMapping("/Password")
 //    public String Password(){
