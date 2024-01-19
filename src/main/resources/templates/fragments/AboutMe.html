@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <!--최초 init-->
-<form action="/personal/aboutMe" method="post" th:fragment="aboutMeInit" th:object="${who}">
+<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()" th:fragment="aboutMeInit" th:object="${who}">
 	<label for="name">
 		<span>Name</span>
 		<input type="text" id="name" name="name" th:value="*{name}">
@@ -44,8 +44,8 @@
 		</th:block>
 	</div>
 	<input type="button" value="태그 추가" onclick="tagAppend()">
-	<input type="hidden" name="id" th:value="${who.id}">
-	<input type="submit" value="작성 완료">
+	<input type="hidden" name="id" id="aboutMeId" th:value="${who.id}">
+	<input type="submit" value="작성 완료" id="aboutMeMessage">
 </form>
 
 

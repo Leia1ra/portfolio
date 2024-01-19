@@ -176,18 +176,42 @@
 		
 		async function asyncAboutMe() {
 			const form = document.querySelector("form[action='#aboutMe']");
-			const formData = new FormData(form);
+			const siteMap = document.getElementsByClassName("siteMap");
+			const tagList = document.getElementsByClassName("tagList");
+			Array.from(siteMap).forEach((value)=>{
+				if(value.children.item(2).value==='' || value.children.item(1).value===''){
+					value.remove();
+				}
+			})
+			Array.from(tagList).forEach((value)=>{
+				if(value.children.item(1).value === ''){
+					value.remove();
+				}
+			})
 			
+			const formData = new FormData(form);
 			const response = await fetch('/personal/aboutMe',{
 				method:"POST",
 				headers:{
 				},
 				body:formData
-			})
+			});
+			const responseValue = await response.json();
 			
-			const result = await response.json();
-			console.log(result);
-			// return false;
+			let message = document.getElementById("aboutMeMessage");
+			if(responseValue.result){
+				if(document.getElementById("aboutMeId") == null){
+					const idTag = document.createElement("input");
+					idTag.type = "hidden";
+					idTag.name = "id";
+					idTag.id = "aboutMeId"
+					idTag.value = responseValue.id;
+					form.appendChild(idTag);
+				}
+				message.value = "저장 성공"
+			} else {
+				message.value = "저장 실패"
+			}
 		}
 	</script>
 </head>
@@ -238,7 +262,7 @@
 					</div>
 				</div>
 				<input type="button" value="태그 추가" onclick="tagAppend()">
-				<input type="submit" value="작성 완료">
+				<input type="submit" value="작성 완료" id="aboutMeMessage">
 			</form>
 		</th:block>
 		<th:block th:if="${who != null}" th:insert="~{fragments/AboutMe.html :: aboutMeInit}"></th:block>
