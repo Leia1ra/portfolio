@@ -16,9 +16,9 @@ public class AboutMeCollection {
     @Id
     private String id;
     private String name;        // 국문 이름
-    private String end_name;    // 영문 이름
+    private String eng_name;    // 영문 이름
     private String phone;       // 연락처
-    private List<String> email;       // 이메일
+    private String email;       // 이메일
     private Map<String, String> link;   // 관련 링크(깃허브 등)
     private List<String> tag;   // 성격
 }

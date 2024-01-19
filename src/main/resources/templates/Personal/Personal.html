@@ -3,21 +3,270 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <head>
-	<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-	<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-	
+	<style>
+		#header{
+			margin: 0;
+			padding-bottom: 20px;
+			border-bottom: 2px solid #497174;
+			color: #497174;
+			text-align: center;
+		}
+		section{
+			border-bottom: 2px solid #497174;
+			color: #497174;
+			padding: 20px 10px;
+		}
+		section>h2{
+			filter: brightness(120%);
+			margin: 0;
+			padding-bottom: 10px;
+			transition: 0.2s;
+		}
+		section:hover>h2{
+			color: #EB6440;
+		}
+		
+		label{
+			width: 100%;
+		}
+		input{
+			width: 100%;
+			height: 40px;
+			border-radius: 10px;
+			border: 2px solid #497174;
+			padding: 5px 10px;
+			outline: none;
+			background-color: #D6E4E5;
+			transition: 0.2s ease;
+		}
+		input:focus{
+			border: 2px solid #EB6440;
+			background-color: transparent;
+		}
+		input:hover{
+			filter:brightness(120%);
+		}
+		
+		input[type='submit'], input[type='button']{
+			border: 2px solid #497174;
+			background-color: #497174;
+			color: white;
+		}
+		input[type='submit']:hover, input[type='button']:hover{
+			filter:brightness(120%);
+			background-color: #EB6440;
+			border: 2px solid #EB6440;
+			color: white;
+		}
+		
+		#aboutMe>form {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+		}
+		#aboutMe>form>*:nth-child(n+5){
+			grid-column: span 2;
+		}
+		
+		#link, #tag{
+			display: grid;
+			gap: 10px;
+		}
+		.siteMap, .tagList{
+			display: flex;
+			flex-direction: row-reverse;
+			gap: 10px;
+		}
+		.siteMap>*:last-child{
+			width: 25%;
+		}
+		
+		.delete{
+			border: 2px solid #497174;
+			background-color: #497174;
+			color: white;
+			height: 40px;
+			border-radius: 10px;
+			transition: 0.5s ease;
+			padding: 0;
+			flex-shrink: 0;
+			font-size: 1.25rem;
+			width: 40px;
+			overflow: hidden;
+		}
+		.delete:hover{
+			filter:brightness(120%);
+			background-color: #EB6440;
+			border: 2px solid #EB6440;
+			color: white;
+			width: 100%;
+		}
+		.delete:after{
+			content: '-';
+		}
+		.delete:hover:after{
+			font-size: 1rem;
+			content: "삭제하기";
+		}
+		.delete:hover ~ input[type="text"]{
+			display: none;
+		}
+	</style>
+	<script>
+		function siteKeyValue() {
+			const siteMap = document.getElementsByClassName("siteMap");
+			Array.from(siteMap).forEach((value)=>{
+				value.children.item(2).addEventListener("change", (event)=>{
+					const siteValue = event.target.value;
+					const linkValue = value.children.item(1);
+					linkValue.name = `link[${siteValue}]`
+				})
+				value.children.item(0).addEventListener("click", (event)=>{
+					const parent = event.target.parentNode;
+					parent.remove();
+				})
+			})
+		}
+		function tagListValue() {
+			const tagList = document.getElementsByClassName("tagList");
+			Array.from(tagList).forEach((value)=>{
+				value.children.item(0).addEventListener("click", (event)=>{
+					const parent = event.target.parentNode;
+					parent.remove();
+				})
+			})
+		}
+		
+		document.addEventListener("DOMContentLoaded", ()=>{
+			siteKeyValue()
+			tagListValue()
+			Array.from(document.getElementsByTagName("form")).forEach((value)=>{
+				value.addEventListener("submit", (event)=>{
+					event.preventDefault();
+				})
+			})
+		})
+		
+		function linkAppend() {
+			const link = document.getElementById("link");
+			const label = document.createElement("div");
+			label.className = "siteMap";
+			label.innerHTML = `
+				<button class="delete"></button>
+				<input type="text" class="value" name="link[]">
+				<input type="text" class="site">
+			`
+			link.appendChild(label);
+			
+			siteKeyValue();
+		}
+		
+		function tagAppend() {
+			const tag = document.getElementById("tag");
+			const label = document.createElement("div");
+			label.className = "tagList";
+			label.innerHTML = `
+				<button class="delete"></button>
+				<input type="text" name="tag">
+			`;
+			tag.appendChild(label);
+			
+			tagListValue()
+		}
+		
+		async function asyncAboutMe() {
+			const form = document.querySelector("form[action='#aboutMe']");
+			const formData = new FormData(form);
+			
+			const response = await fetch('/personal/aboutMe',{
+				method:"POST",
+				headers:{
+				},
+				body:formData
+			})
+			
+			const result = await response.json();
+			console.log(result);
+			// return false;
+		}
+	</script>
 </head>
 <main layout:fragment="content">
-	<div id="editor"></div>
-	<script>
-		const Editor = toastui.Editor;
+	<h1 id="header">
+		PERSONAL
+	</h1>
+	<!-- 주인장 정보-->
+	<section id="aboutMe">
+		<h2>About Me</h2>
+		<th:block th:if="${who == null}">
+			<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()">
+				<label for="name">
+					<span>Name</span>
+					<input type="text" id="name" name="name">
+				</label>
+				
+				<label for="eng_name">
+					<span>Eng Name</span>
+					<input type="text" id="eng_name" name="eng_name">
+				</label>
+				
+				<label for="phone">
+					<span>Phone</span>
+					<input type="text" id="phone" name="phone">
+				</label>
+				
+				<label>
+					<span>Email</span>
+					<input type="text" name="email">
+				</label>
+				
+				<div id="link">
+					<span>Link</span>
+					<div class="siteMap">
+						<button class="delete"></button>
+						<input type="text" class="value" name="link[]">
+						<input type="text" class="site">
+					</div>
+				</div>
+				<input type="button" value="링크 추가" onclick="linkAppend()">
+				
+				<div id="tag">
+					<span>Tag</span>
+					<div class="tagList">
+						<button class="delete"></button>
+						<input type="text" name="tag">
+					</div>
+				</div>
+				<input type="button" value="태그 추가" onclick="tagAppend()">
+				<input type="submit" value="작성 완료">
+			</form>
+		</th:block>
+		<th:block th:if="${who != null}" th:insert="~{fragments/AboutMe.html :: aboutMeInit}"></th:block>
+	</section>
+	
+	<!-- 자기소개서 -->
+	<section>
+		<h2>Introduce</h2>
+		<form action="/personal/introduce" method="post">
+			<input type="text">
+			<input type="submit" value="작성 완료">
+		</form>
+	</section>
+	
+	<!-- 성장배경 -->
+	<section>
+		<h2>Growth</h2>
+		<form action="/personal/growth">
 		
-		const editor = new Editor({
-			el: document.querySelector('#editor'),
-			height: '600px',
-			initialEditType: 'markdown',
-			previewStyle: 'vertical'
-		});
-	</script>
+		</form>
+	</section>
+	
+	<!-- 상훈기록 -->
+	<section>
+		<h2>Award</h2>
+		<form action="">
+		
+		</form>
+	</section>
 </main>
 </html>

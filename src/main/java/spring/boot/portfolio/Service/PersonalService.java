@@ -8,6 +8,8 @@ import spring.boot.portfolio.Repository.AwardRepository;
 import spring.boot.portfolio.Repository.GrowthRepository;
 import spring.boot.portfolio.Repository.IntroductionRepository;
 
+import java.util.List;
+
 @Service(value = "PersonalService") @RequiredArgsConstructor
 public class PersonalService {
     private final AboutMeRepository aboutMeRepository;
@@ -15,5 +17,12 @@ public class PersonalService {
     private final GrowthRepository growthRepository;
     private final IntroductionRepository introductionRepository;
 
+    public List<AboutMeCollection> aboutMeFind(){
+        return aboutMeRepository.findAll();
+    }
+
+    public AboutMeCollection aboutMeSave(AboutMeCollection ac) {
+        return aboutMeRepository.save(ac);
+    }
 
 }

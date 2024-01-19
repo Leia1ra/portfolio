@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!--최초 init-->
+<form action="/personal/aboutMe" method="post" th:fragment="aboutMeInit" th:object="${who}">
+	<label for="name">
+		<span>Name</span>
+		<input type="text" id="name" name="name" th:value="*{name}">
+	</label>
+	
+	<label for="eng_name">
+		<span>Eng Name</span>
+		<input type="text" id="eng_name" name="eng_name" th:value="*{eng_name}">
+	</label>
+	
+	<label for="phone">
+		<span>Phone</span>
+		<input type="text" id="phone" name="phone" th:value="*{phone}">
+	</label>
+	
+	<label>
+		<span>Email</span>
+		<input type="text" name="email" th:value="*{email}">
+	</label>
+	
+	<div id="link">
+		<span>Link</span>
+		<th:block th:each="map : *{link}">
+			<div class="siteMap">
+				<button class="delete"></button>
+				<input type="text" class="value" th:value="${map.getValue()}" th:name="'link[' + ${map.getKey()} + ']'">
+				<input type="text" class="site" th:value="${map.getKey()}">
+			</div>
+		</th:block>
+	</div>
+	<input type="button" value="링크 추가" onclick="linkAppend()">
+	
+	<div id="tag">
+		<span>Tag</span>
+		<th:block th:each="list : *{tag}">
+			<div class="tagList">
+				<button class="delete"></button>
+				<input type="text" name="tag" th:value="${list}">
+			</div>
+		</th:block>
+	</div>
+	<input type="button" value="태그 추가" onclick="tagAppend()">
+	<input type="hidden" name="id" th:value="${who.id}">
+	<input type="submit" value="작성 완료">
+</form>
+
+
+
+</html>
