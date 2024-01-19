@@ -26,29 +26,39 @@ public class PostController {
 //    String password;
 
     @RequestMapping("/PostList") /*@ResponseBody*/
-    public String PrintList(Model model, String mode, String value){
-        if (mode == null) mode = "all";
-        List<PostCollection> postCollections;
+    public String PrintList(Model model, String search_value,
+                            @RequestParam(name = "post_lang", required = false)List<String> post_langs,
+                            @RequestParam(name = "post_skill", required = false)List<String> post_skills){
+        List<PostCollection> postCollections = postService.findAll();
         List<LangCollection> Langs = postService.findLangAll();
         List<SkillCollection> Skills = postService.findSkillAll();
-        switch (mode) {
-            case "include_name" -> postCollections = postService.findByNameInclude(value);
-            case "name" -> {
-                postCollections = new ArrayList<>();
-                postCollections.add(postService.findByName(value));
-            }
-            case "lang" -> postCollections = postService.findByLang(value);
-            case "skill" -> postCollections = postService.findBySkill(value);
-            case "id" -> {
-                postCollections = new ArrayList<>();
-                postCollections.add(postService.findById(value));
-            }
-            default -> postCollections = postService.findAll();
+        if(post_langs == null) post_langs = new ArrayList<>();
+        if(post_skills == null) post_skills = new ArrayList<>();
+
+        if(!post_langs.isEmpty() || !post_skills.isEmpty()){
+            List<String> finalPost_langs = post_langs;
+            List<String> finalPost_skills = post_skills;
+            postCollections = postCollections.stream().filter(post ->
+               !finalPost_langs.stream().filter(lang ->
+                       post.getLang_id().contains(lang)
+               ).toList().isEmpty()
+                    ||
+               !finalPost_skills.stream().filter(skill ->
+                       post.getSkill_id().contains(skill)
+               ).toList().isEmpty()
+            ).toList();
+        }
+        if(!(search_value == null)){
+            postCollections = postCollections.stream().filter(post ->
+                    post.getName().contains(search_value)).toList();
         }
 
         model.addAttribute("posts", postCollections);
         model.addAttribute("Langs", Langs);
         model.addAttribute("Skills", Skills);
+        model.addAttribute("Category_Langs", post_langs);
+        model.addAttribute("Category_Skills", post_skills);
+        model.addAttribute("SearchValue", search_value);
         return "Post/PostList";
     }
     @RequestMapping("/PostInsertPage")

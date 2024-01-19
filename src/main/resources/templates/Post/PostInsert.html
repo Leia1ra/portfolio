@@ -47,7 +47,7 @@
                             th:selected="${PostData.getSkill_id().contains(opt.getId())}"></option>
                 </select>
                 <br/>
-                <input type="text" name="post_thumbnail" th:value="${PostData.getThumbnail()}">
+                <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${PostData.getThumbnail()}">
             </th:block>
         </label>
         <br />
