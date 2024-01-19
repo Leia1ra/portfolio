@@ -1,226 +1,81 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="ko">
 
 <!--뷰-->
 <head>
     <meta charset="UTF-8">
     <title>PostInsertPage</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <style>
-        section{
-            display: inline-block;
-        }
-        .add{
-            cursor: pointer;
-        }
-    </style>
+    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
 <body>
-<p>게시글 안에 들어가는 이미지는 언제나 720*720 크기의 사진이어야 합니다.</p>
-<form action="PostInsertAction" method="get">
-    <th:block th:switch="${PostData}">
-        <label th:case="${null}">
-            <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
+<main layout:fragment="content">
+    <p>게시글 안에 들어가는 썸네일 이미지는 언제나 720*720 크기의 사진이어야 합니다.</p>
+    <form action="PostInsertAction" method="get">
+        <th:block th:switch="${PostData}">
+            <label th:case="${null}">
+                <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
+            </label>
+            <label th:case="*">
+                <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${PostData.getName()}"/>
+            </label>
+        </th:block>
+        <label th:switch="${PostData}">
+            <th:block th:case="${null}">
+                <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
+                    <option th:text="새로만들기" th:value="set_new"></option>
+                    <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
+                </select>
+                    <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
+                    <option th:text="새로만들기" th:value="set_new"></option>
+                    <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
+                </select>
+                <br/>
+                <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail">
+            </th:block>
+            <th:block th:case="*">
+                <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
+                    <option th:text="새로만들기" th:value="set_new"></option>
+                    <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"
+                            th:selected="${PostData.getLang_id().contains(opt.getId())}"></option>
+                </select>
+                    <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
+                    <option th:text="새로만들기" th:value="set_new"></option>
+                    <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"
+                            th:selected="${PostData.getSkill_id().contains(opt.getId())}"></option>
+                </select>
+                <br/>
+                <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${PostData.getThumbnail()}">
+            </th:block>
         </label>
-        <label th:case="*">
-            <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${PostData.getName()}"/>
-        </label>
-    </th:block>
-    <label th:switch="${PostData}">
-        <th:block th:case="${null}">
-            <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
-                <option th:text="새로만들기" th:value="set_new"></option>
-                <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
-            </select>
-            <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
-                <option th:text="새로만들기" th:value="set_new"></option>
-                <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
-            </select>
-        </th:block>
-        <th:block th:case="*">
-            <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
-                <option th:text="새로만들기" th:value="set_new"></option>
-                <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                        th:selected="${PostData.getLang_id().contains(opt.getId())}"></option>
-            </select>
-            <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
-                <option th:text="새로만들기" th:value="set_new"></option>
-                <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                        th:selected="${PostData.getSkill_id().contains(opt.getId())}"></option>
-            </select>
+        <br />
+        <section id="post_elements"></section>
+        <th:block th:switch="${PostData}">
+            <input th:case="${null}" id="post_content" type="hidden" name="post_content" />
+            <input th:case="*" id="post_content" type="hidden" name="post_content" th:value="${PostData.getContents()}"/>
         </th:block>
 
-    </label>
-    <br />
-
-    <section id="post_elements">
-        <th:block th:if="${PostData != null}">
-            <input type="text" readonly name="id" hidden="hidden" th:value="${PostData.getId()}"/>
-            <article th:each="opt : ${PostData.getContents()}" class="post_drag" draggable="true">
-                <hr draggable="false"/>
-                <article draggable="false" style="display: inline-block">
-                    <label th:switch="${opt.getMode()}">
-                        <input th:case="${PostStr}" type="text" readonly class="type_name" name="post_type" value="Text"/>
-                        <input th:case="${PostImg}" type="text" readonly class="type_name" name="post_type" value="Img"/>
-                        <input th:case="${PostLink}" type="text" readonly class="type_name" name="post_type" value="Link"/>
-                    </label>
-                    <label>
-                        <textarea name="post_content" class="post_content" cols="30" rows="10" th:text="${opt.getContent()}"></textarea>
-                    </label>
-                </article>
-                <th:block th:switch="${opt.getMode()}">
-                    <article th:case="${PostStr}" class="preview text_type" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false"></article>
-                    <article th:case="${PostImg}" class="preview img_type" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false"></article>
-                    <article th:case="${PostLink}" class="preview link_type" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false"></article>
-                </th:block>
-
-                <br />
-                <!--                <span class="up">👆 </span><span class="down"> 👇</span> <br />-->
-                <span class="add text" draggable="false">글 추가 </span>
-                <span class="add img" draggable="false"> 이미지 추가 </span>
-                <span class="add link" draggable="false"> 링크 추가 </span>
-            </article>
-        </th:block>
-
-        <article class="post_drag main_post" draggable="true">
-            <hr draggable="false"/>
-            <article draggable="false" style="display: inline-block">
-                <label>
-                    <input type="text" readonly class="type_name" name="post_type"/>
-                </label>
-                <label>
-                    <textarea name="post_content" class="post_content" cols="30" rows="10"></textarea>
-                </label>
-            </article>
-            <article class="preview" style="display: inline-block; border-left: 1px black solid; width: fit-content; height: fit-content;" draggable="false">
-
-            </article>
-            <br />
-<!--                <span class="up">👆 </span><span class="down"> 👇</span> <br />-->
-            <span class="add text" draggable="false">글 추가 </span>
-            <span class="add img" draggable="false"> 이미지 추가 </span>
-            <span class="add link" draggable="false"> 링크 추가 </span>
-        </article>
-    </section>
-    <input type="submit" value="업로드">
-</form>
-
-<script>
-    let select_lang = document.querySelector("#set_new_lang");
-    select_lang.addEventListener("change", () => {
-        let changer = select_lang;
-        console.log(changer);
-        if(changer.value === "set_new"){
-            let name = prompt("새로 만들 언어 이름을 정하세요");
-            let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
-            if(name !== null && img !== null){
-                location.href = "http://"+location.host + "/Post/AddLang?name="+name+"&img="+img;
-            }
-        }
-    });
-
-    let select_skill = document.querySelector("#set_new_skill");
-    select_skill.addEventListener("change", () => {
-        let changer = select_skill;
-        console.log(changer);
-        if(changer.value === "set_new"){
-            let name = prompt("새로 만들 기술 이름을 정하세요");
-            let description = prompt("새로 만들 기술에 대한 설명을 적으세요");
-            let level = prompt("새로 만들 기술에 대한 당신의 실력을 레벨로 적으세요");
-            let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
-            if(name !== "" && description !== null && level >= 0 && img !== null){
-                location.href = "http://"+location.host + "/Post/AddSkill?name="+name+"&description="+description+"&level="+level+"&img="+img;
-            }
-        }
-    });
-
-    let post_element_copy = document.querySelector(".main_post").cloneNode(true);
-    let post_elements = document.querySelector("#post_elements");
-    let drag_start;
-
-    const add_content = (post_element,post_content, preview)=>{
-        post_content.addEventListener("change", () => {
-            let content = post_content;
-            let view = preview;
-            console.log(content.value);
-            if(view.classList.contains("text_type")){
-                view.innerHTML = marked.parse(content.value);
-            }
-            else if(view.classList.contains("img_type")){
-                view.innerHTML = `<img src='${content.value}' alt="잘못된 이미지 링크입니다." width="720px" height="720px" style="object-fit: contain"/>`;
-            }
-            else if(view.classList.contains("link_type")){
-                view.innerHTML = `<a href='${content.value}' >${content.value}</a>>`;
-            }
-        });
-        let add_text = post_element.querySelector(".text");
-        let add_img = post_element.querySelector(".img");
-        let add_link = post_element.querySelector(".link");
-
-        // let up_btn = post_element.querySelector(".up");
-        // let down_btn = post_element.querySelector(".down");
-        add_text.addEventListener("click", () => {
-            let node = post_elements.appendChild(post_element_copy.cloneNode(true));
-            let temp_content = node.querySelector(".post_content");
-            let temp_preview = node.querySelector(".preview");
-            temp_preview.classList.add('text_type');
-            node.querySelector(".type_name").value="Text";
-            add_content(node,temp_content,temp_preview);
-        });
-        add_img.addEventListener("click", () => {
-            let node = post_elements.appendChild(post_element_copy.cloneNode(true));
-            let temp_content = node.querySelector(".post_content");
-            let temp_preview = node.querySelector(".preview");
-            temp_preview.classList.add('img_type');
-            node.querySelector(".type_name").value="Img";
-            add_content(node,temp_content,temp_preview);
-        });
-        add_link.addEventListener("click", () => {
-            let node = post_elements.appendChild(post_element_copy.cloneNode(true));
-            let temp_content = node.querySelector(".post_content");
-            let temp_preview = node.querySelector(".preview");
-            temp_preview.classList.add('link_type');
-            node.querySelector(".type_name").value="Link";
-            add_content(node,temp_content,temp_preview);
-        });
-
-        post_element.addEventListener("dragstart", (e)=>{
-            console.log("Dragstart");
-            drag_start = e.target;
-        })
-        post_element.addEventListener("dragenter", (e)=>{
-            let target = e.target;
-            console.log(target.className);
-            if(target.classList.contains("post_drag") && drag_start !== target){
-                console.log("바꾸기 시도");
-                post_element.insertAdjacentElement("afterend",drag_start);
-                // post_drag.insertAdjacentElement("afterend",target);
-            }
-        })
-        post_element.addEventListener("dragleave", (e)=>{
-            let target = e.target;
-            console.log(target.className);
-            if(target.classList.contains("post_drag") && drag_start !== target){
-                console.log("바꾸기 시도");
-                post_element.insertAdjacentElement("afterend",drag_start);
-                // post_drag.insertAdjacentElement("afterend",target);
-            }
-        })
-    }
-    document.querySelector(".main_post").querySelector(".preview").classList.add("text_type");
-    document.querySelector(".main_post").querySelector(".type_name").value = "Text"
-    // add_content(document.querySelector(".post_drag")
-    //     , document.querySelector(".post_content")
-    //     , document.querySelector(".preview"));
-    document.querySelector(".main_post").classList.remove("main_post");
-
-    document.querySelectorAll(".post_drag").forEach(post => {
-        console.log("포스트 감지 후 이벤트 부여");
-        console.log(post);
-        console.log(post.querySelector(".post_content"));
-        console.log(post.querySelector(".preview"));
-       add_content(post, post.querySelector(".post_content"), post.querySelector(".preview"));
-    });
-</script>
+        <input type="submit" value="업로드">
+        <script>
+            const Editor = toastui.Editor;
+            const Inputer = document.querySelector("#post_content");
+            const post_elements = new Editor({
+                el: document.querySelector('#post_elements'),
+                height: '600px',
+                initialEditType: 'markdown',
+                previewStyle: 'vertical',
+                events: {
+                    change: () =>{
+                        // console.log(post_elements.getMarkdown());
+                        Inputer.value = post_elements.getMarkdown();
+                    },
+                }
+            });
+            post_elements.setMarkdown(document.querySelector("#post_content").value);
+        </script>
+    </form>
+</main>
 </body>
 </html>
