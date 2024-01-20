@@ -29,10 +29,12 @@ public class PersonalController {
         /*System.out.println(aboutMeList.getFirst());*/
         if (aboutMeList.size() > 1){
             model.addAttribute("who",aboutMeList);
-        } else if (aboutMeList.size() == 1){
-            model.addAttribute("who",aboutMeList.getFirst());
+            return "Personal/AboutMeError";
         } else {
-            model.addAttribute("who", null);
+            AboutMeCollection ac;
+            if (aboutMeList.isEmpty()) ac = new AboutMeCollection();
+            else ac = aboutMeList.getFirst();
+            model.addAttribute("who", ac);
         }
 
         return "Personal/Personal";
@@ -42,12 +44,10 @@ public class PersonalController {
     public Map<String,Object> aboutMe(AboutMeCollection ac){
         System.out.println(ac.toString());
         Map<String,Object> value = new HashMap<String, Object>();
-
         try {
             service.aboutMeSave(ac);
             value.put("result", true);
             value.put("id", service.aboutMeFind().getFirst().getId());
-
         } catch (Exception e) {
             log.info("DB Error Transaction -> {}", e.getMessage());
             value.put("result", false);

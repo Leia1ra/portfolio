@@ -222,50 +222,46 @@
 	<!-- 주인장 정보-->
 	<section id="aboutMe">
 		<h2>About Me</h2>
-		<th:block th:if="${who == null}">
-			<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()">
-				<label for="name">
-					<span>Name</span>
-					<input type="text" id="name" name="name">
-				</label>
-				
-				<label for="eng_name">
-					<span>Eng Name</span>
-					<input type="text" id="eng_name" name="eng_name">
-				</label>
-				
-				<label for="phone">
-					<span>Phone</span>
-					<input type="text" id="phone" name="phone">
-				</label>
-				
-				<label>
-					<span>Email</span>
-					<input type="text" name="email">
-				</label>
-				
-				<div id="link">
-					<span>Link</span>
+		<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()" th:object="${who}">
+			<label><span>Name</span>
+				<input type="text" th:field="*{name}">
+			</label>
+			<label><span>Eng Name</span>
+				<input type="text" th:field="*{eng_name}">
+			</label>
+			<label><span>Phone</span>
+				<input type="text" th:field="*{phone}">
+			</label>
+			<label><span>Email</span>
+				<input type="text" th:field="*{email}">
+			</label>
+			
+			<div id="link"><span>Link</span>
+				<th:block th:each="map : *{link}">
 					<div class="siteMap">
 						<button class="delete"></button>
-						<input type="text" class="value" name="link[]">
-						<input type="text" class="site">
+						<input type="text" class="value" th:value="${map.getValue()}" th:name="'link[' + ${map.getKey()} + ']'">
+						<input type="text" class="site" th:value="${map.getKey()}">
 					</div>
-				</div>
-				<input type="button" value="링크 추가" onclick="linkAppend()">
-				
-				<div id="tag">
-					<span>Tag</span>
+				</th:block>
+			</div>
+			<input type="button" value="링크 추가" onclick="linkAppend()">
+			
+			<div id="tag">
+				<span>Tag</span>
+				<th:block th:each="list : *{tag}">
 					<div class="tagList">
 						<button class="delete"></button>
-						<input type="text" name="tag">
+						<input type="text" name="tag" th:value="${list}">
 					</div>
-				</div>
-				<input type="button" value="태그 추가" onclick="tagAppend()">
-				<input type="submit" value="작성 완료" id="aboutMeMessage">
-			</form>
-		</th:block>
-		<th:block th:if="${who != null}" th:insert="~{fragments/AboutMe.html :: aboutMeInit}"></th:block>
+				</th:block>
+			</div>
+			<input type="button" value="태그 추가" onclick="tagAppend()">
+			<th:block th:if="*{id!=null or id !=null}">
+				<input type="hidden" name="id" id="aboutMeId" th:value="*{id}">
+			</th:block>
+			<input type="submit" value="작성 완료" id="aboutMeMessage">
+		</form>
 	</section>
 	
 	<!-- 자기소개서 -->
