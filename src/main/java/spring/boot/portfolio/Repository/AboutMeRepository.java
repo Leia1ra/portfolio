@@ -5,4 +5,5 @@ import spring.boot.portfolio.Model.AboutMeModel.AboutMeCollection;
 
 public interface AboutMeRepository extends MongoRepository<AboutMeCollection, String> {
 
+    void deleteAllByIdNot(String id);
 }

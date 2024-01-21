@@ -9,7 +9,6 @@ import spring.boot.portfolio.Repository.AwardRepository;
 import spring.boot.portfolio.Repository.GrowthRepository;
 import spring.boot.portfolio.Repository.IntroductionRepository;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service(value = "PersonalService") @RequiredArgsConstructor
@@ -26,7 +25,12 @@ public class PersonalService {
     @Transactional
     public void aboutMeSave(AboutMeCollection ac) throws Exception {
         aboutMeRepository.save(ac);
-        // if(true){throw new RuntimeException("ㅎㅇ");}
+
     }
 
+    @Transactional
+    public void aboutMeExceptionSelect(String id) throws Exception{
+        aboutMeRepository.deleteAllByIdNot(id);
+        // if(true){throw new RuntimeException("ㅎㅇ");}
+    }
 }

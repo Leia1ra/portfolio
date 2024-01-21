@@ -4,11 +4,9 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.json.JsonObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.web.servlet.IServletWebExchange;
 import spring.boot.portfolio.Model.AboutMeModel.AboutMeCollection;
 import spring.boot.portfolio.Service.PersonalService;
 
@@ -28,16 +26,28 @@ public class PersonalController {
         List<AboutMeCollection> aboutMeList = service.aboutMeFind();
         /*System.out.println(aboutMeList.getFirst());*/
         if (aboutMeList.size() > 1){
-            model.addAttribute("who",aboutMeList);
-            return "Personal/AboutMeError";
+            model.addAttribute("aboutMeList", aboutMeList);
+            model.addAttribute("exception", true);
         } else {
             AboutMeCollection ac;
             if (aboutMeList.isEmpty()) ac = new AboutMeCollection();
             else ac = aboutMeList.getFirst();
-            model.addAttribute("who", ac);
+            model.addAttribute("aboutMe", ac);
+            model.addAttribute("exception", false);
         }
-
         return "Personal/Personal";
+    }
+
+    @PostMapping("{id}")
+    public String personalException(@PathVariable(name = "id") String id){
+        System.out.println(id);
+        try {
+            service.aboutMeExceptionSelect(id);
+            return "redirect:/personal/";
+        } catch (Exception e) {
+            log.info("DB DELETE ERROR Transaction -> {}",e.getMessage());
+            return "redirect:/personal/?errMsg=Server Error..";
+        }
     }
 
     @PostMapping("/aboutMe") @ResponseBody

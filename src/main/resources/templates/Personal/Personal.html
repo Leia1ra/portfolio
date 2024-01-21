@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <head>
-	<style>
+	<style th:unless="${exception}">
 		#header{
 			margin: 0;
 			padding-bottom: 20px;
@@ -112,7 +112,7 @@
 			display: none;
 		}
 	</style>
-	<script>
+	<script th:unless="${exception}">
 		function siteKeyValue() {
 			const siteMap = document.getElementsByClassName("siteMap");
 			Array.from(siteMap).forEach((value)=>{
@@ -216,77 +216,79 @@
 	</script>
 </head>
 <main layout:fragment="content">
-	<h1 id="header">
-		PERSONAL
-	</h1>
+	<th:block th:if="${exception}" th:insert="~{fragments/AboutMeList :: AboutMeList}"></th:block>
 	<!-- 주인장 정보-->
-	<section id="aboutMe">
-		<h2>About Me</h2>
-		<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()" th:object="${who}">
-			<label><span>Name</span>
-				<input type="text" th:field="*{name}">
-			</label>
-			<label><span>Eng Name</span>
-				<input type="text" th:field="*{eng_name}">
-			</label>
-			<label><span>Phone</span>
-				<input type="text" th:field="*{phone}">
-			</label>
-			<label><span>Email</span>
-				<input type="text" th:field="*{email}">
-			</label>
-			
-			<div id="link"><span>Link</span>
-				<th:block th:each="map : *{link}">
-					<div class="siteMap">
-						<button class="delete"></button>
-						<input type="text" class="value" th:value="${map.getValue()}" th:name="'link[' + ${map.getKey()} + ']'">
-						<input type="text" class="site" th:value="${map.getKey()}">
-					</div>
-				</th:block>
-			</div>
-			<input type="button" value="링크 추가" onclick="linkAppend()">
-			
-			<div id="tag">
-				<span>Tag</span>
-				<th:block th:each="list : *{tag}">
-					<div class="tagList">
-						<button class="delete"></button>
-						<input type="text" name="tag" th:value="${list}">
-					</div>
-				</th:block>
-			</div>
-			<input type="button" value="태그 추가" onclick="tagAppend()">
-			<th:block th:if="*{id!=null or id !=null}">
-				<input type="hidden" name="id" id="aboutMeId" th:value="*{id}">
-			</th:block>
-			<input type="submit" value="작성 완료" id="aboutMeMessage">
-		</form>
-	</section>
-	
-	<!-- 자기소개서 -->
-	<section>
-		<h2>Introduce</h2>
-		<form action="/personal/introduce" method="post">
-			<input type="text">
-			<input type="submit" value="작성 완료">
-		</form>
-	</section>
-	
-	<!-- 성장배경 -->
-	<section>
-		<h2>Growth</h2>
-		<form action="/personal/growth">
+	<th:block th:unless="${exception}">
+		<h1 id="header">PERSONAL</h1>
 		
-		</form>
-	</section>
-	
-	<!-- 상훈기록 -->
-	<section>
-		<h2>Award</h2>
-		<form action="">
+		<section id="aboutMe">
+			<h2>About Me</h2>
+			<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()" th:object="${aboutMe}">
+				<label><span>Name</span>
+					<input type="text" th:field="*{name}">
+				</label>
+				<label><span>Eng Name</span>
+					<input type="text" th:field="*{eng_name}">
+				</label>
+				<label><span>Phone</span>
+					<input type="text" th:field="*{phone}">
+				</label>
+				<label><span>Email</span>
+					<input type="text" th:field="*{email}">
+				</label>
+				
+				<div id="link"><span>Link</span>
+					<th:block th:each="map : *{link}">
+						<div class="siteMap">
+							<button class="delete"></button>
+							<input type="text" class="value" th:value="${map.getValue()}" th:name="'link[' + ${map.getKey()} + ']'">
+							<input type="text" class="site" th:value="${map.getKey()}">
+						</div>
+					</th:block>
+				</div>
+				<input type="button" value="링크 추가" onclick="linkAppend()">
+				
+				<div id="tag">
+					<span>Tag</span>
+					<th:block th:each="list : *{tag}">
+						<div class="tagList">
+							<button class="delete"></button>
+							<input type="text" name="tag" th:value="${list}">
+						</div>
+					</th:block>
+				</div>
+				<input type="button" value="태그 추가" onclick="tagAppend()">
+				<th:block th:if="*{id!=null or id !=null}">
+					<input type="hidden" name="id" id="aboutMeId" th:value="*{id}">
+				</th:block>
+				<input type="submit" value="작성 완료" id="aboutMeMessage">
+			</form>
+		</section>
 		
-		</form>
-	</section>
+		<!-- 자기소개서 -->
+		<section>
+			<h2>Introduce</h2>
+			<form action="/personal/introduce" method="post">
+				<input type="text">
+				<input type="submit" value="작성 완료">
+			</form>
+		</section>
+		
+		<!-- 성장배경 -->
+		<section>
+			<h2>Growth</h2>
+			<form action="/personal/growth">
+			
+			</form>
+		</section>
+		
+		<!-- 상훈기록 -->
+		<section>
+			<h2>Award</h2>
+			<form action="">
+			
+			</form>
+		</section>
+	</th:block>
 </main>
 </html>
