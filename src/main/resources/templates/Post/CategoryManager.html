@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/layout}" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>CategoryManager</title>
+<!--    <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>-->
+<!--    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />-->
+    <style>
+        .lang, .skill{
+            width: 20rem;
+            height: fit-content;
+        }
+        .category_container{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-left: 2rem;
+            margin-right: 2rem;
+            justify-items: center;
+            align-items: center;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            background-color: var(--c1);
+        }
+        .category_langs, .category_skills{
+            display: flex;
+            flex-direction: column;
+            row-gap: 3rem;
+        }
+        .category_image{
+            display: flex;
+            flex-direction: column;
+        }
+        .category_image > img{
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
+        .name > input{
+            display: inline-block;
+            width: calc(100% - 3.5rem);
+        }
+        .name > span{
+            margin: 0;
+            padding: 0;
+            display: inline-block;
+            width: 3rem;
+        }
+        .delete_button, .delete_button > input, .name, .update_button, .update_button > input, .description, .description > textarea{
+            display: block;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+<main layout:fragment="content">
+    <section class="category_container">
+        <article class="category_langs">
+            <nav class="lang" th:each="opt: ${Langs}">
+                <form action="LangUpdateAction" method="get">
+                    <input type="hidden" readonly th:value="${opt.getId()}" name="id"/>
+                    <label class="category_image">
+                        <img th:src="${opt.getImg()}"  alt="이미지를 불러올 수 없습니다!"/>
+                        <input type="text" th:value="${opt.getImg()}" name="img"/>
+                    </label>
+                    <label class="name">
+                        <span>이름: </span>
+                        <input type="text" th:value="${opt.getName()}" name="name"/>
+                    </label>
+                    <label class="update_button">
+                        <input type="submit" value="수정"/>
+                    </label>
+                </form>
+                <form action="LangDeleteAction" method="get" class="delete_form">
+                    <input type="hidden" readonly th:value="${opt.getId()}" name="id"/>
+                    <label class="delete_button">
+                        <input type="submit" value="제거"/>
+                    </label>
+                </form>
+            </nav>
+            <nav class="lang new_category">
+                <form action="AddLang" method="get">
+                    <input type="hidden" readonly th:value="${null}" name="id"/>
+                    <label class="category_image">
+                        <img src="" alt="이미지를 불러올 수 없습니다!"/>
+                        <input type="text" name="img"/>
+                    </label>
+                    <label class="name">
+                        <span>이름: </span>
+                        <input type="text" name="name"/>
+                    </label>
+                    <label class="update_button">
+                        <input type="submit" value="추가"/>
+                    </label>
+                </form>
+            </nav>
+        </article>
+        <article class="category_skills">
+            <nav class="skill" th:each="opt: ${Skills}">
+                <form action="SkillUpdateAction" method="get">
+                    <input type="hidden" readonly th:value="${opt.getId()}" name="id"/>
+                    <label class="category_image">
+                        <img th:src="${opt.getImg()}"  alt="이미지를 불러올 수 없습니다!"/>
+                        <input type="text" th:value="${opt.getImg()}" name="img"/>
+                    </label>
+                    <label class="name">
+                        <span>이름: </span>
+                        <input type="text" th:value="${opt.getName()}" name="name"/>
+                        <span>레벨: </span>
+                        <input type="number" th:value="${opt.getLevel()}" name="level"/>
+                    </label>
+                    <label class="description">
+                        <textarea th:text="${opt.getDescription()}" name="description"/>
+                    </label>
+                    <label class="update_button">
+                        <input type="submit" value="수정"/>
+                    </label>
+                </form>
+                <form action="SkillDeleteAction" method="get" class="delete_form">
+                    <input type="hidden" readonly th:value="${opt.getId()}" name="id"/>
+                    <label class="delete_button">
+                        <input type="submit" value="제거"/>
+                    </label>
+                </form>
+            </nav>
+            <nav class="skill new_category">
+                <form action="AddSkill" method="get">
+                    <input type="hidden" readonly th:value="${null}" name="id"/>
+                    <label class="category_image">
+                        <img src="" alt="이미지를 불러올 수 없습니다!"/>
+                        <input type="text" name="img"/>
+                    </label>
+                    <label class="name">
+                        <span>이름: </span>
+                        <input type="text" value="" name="name"/>
+                        <span>레벨: </span>
+                        <input type="number" value="" name="level"/>
+                    </label>
+                    <label class="description">
+                        <textarea name="description"></textarea>
+                    </label>
+                    <label class="update_button">
+                        <input type="submit" value="추가"/>
+                    </label>
+                </form>
+            </nav>
+        </article>
+    </section>
+    <script>
+        const new_elements = document.querySelectorAll('.category_image');
+        const category_skills = document.querySelector('.category_skills');
+        const new_skills = category_skills.querySelector('.new_category > form');
+        const category_langs = document.querySelector('.category_langs');
+        const new_langs = category_langs.querySelector('.new_category > form');
+        new_elements.forEach(new_ele => {
+           const img = new_ele.querySelector('img');
+           const url = new_ele.querySelector('input');
+
+           url.addEventListener('change', () => {
+               console.log(url.value);
+               img.src = url.value;
+           });
+        });
+
+        new_skills.addEventListener('submit', (e) => {
+            e.preventDefault();
+            fetch("http://"+location.host
+                + "/Post/AddSkill?name=" +new_skills.name.value
+                +"&description="+new_skills.description.value
+                +"&level="+new_skills.level.value
+                +"&img="+new_skills.img.value
+            ).then(location.reload());
+        });
+        new_langs.addEventListener('submit', (e) => {
+            e.preventDefault();
+            fetch("http://"+location.host
+                + "/Post/AddLang?name=" +new_langs.name.value
+                +"&img="+new_langs.img.value
+            ).then(location.reload());
+        });
+    </script>
+</main>
+</body>
+</html>
