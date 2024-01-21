@@ -59,6 +59,34 @@
 
         <input type="submit" value="업로드">
         <script>
+            const select_lang = document.querySelector("#set_new_lang");
+            select_lang.addEventListener("change", () => {
+                let changer = select_lang;
+                console.log(changer);
+                if(changer.value === "set_new"){
+                    let name = prompt("새로 만들 언어 이름을 정하세요");
+                    let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
+                    if(name !== null && img !== null){
+                        location.href = "http://"+location.host + "/Post/AddLang?name="+name+"&img="+img;
+                    }
+                }
+            });
+
+            const select_skill = document.querySelector("#set_new_skill");
+            select_skill.addEventListener("change", () => {
+                let changer = select_skill;
+                console.log(changer);
+                if(changer.value === "set_new"){
+                    let name = prompt("새로 만들 기술 이름을 정하세요");
+                    let description = prompt("새로 만들 기술에 대한 설명을 적으세요");
+                    let level = prompt("새로 만들 기술에 대한 당신의 실력을 레벨로 적으세요");
+                    let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
+                    if(name !== "" && description !== null && level >= 0 && img !== null){
+                        location.href = "http://"+location.host + "/Post/AddSkill?name="+name+"&description="+description+"&level="+level+"&img="+img;
+                    }
+                }
+            });
+
             const Editor = toastui.Editor;
             const Inputer = document.querySelector("#post_content");
             const post_elements = new Editor({

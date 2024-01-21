@@ -74,8 +74,40 @@ public class PostService {
     public LangCollection saveLang(String name, String img){
         return langRepository.save(new LangCollection(name, img));
     }
+    public LangCollection updateLang(String id, String name, String img){
+        LangCollection lang = langRepository.findById(id).orElseThrow();
+        lang.setName(name);
+        lang.setImg(img);
+        return langRepository.save(lang); //생성 날짜와 수정날짜가 변동되지 않을 수 있음 확인바람
+    }
+    public void deleteLang(String id){
+        langRepository.deleteById(id);
+        List<PostCollection> posts = postRepository.findAll();
+        posts = posts.stream().filter(p -> p.getLang_id().contains(id)).toList();
+        posts.forEach(p -> p.setLang_id(p.getLang_id().stream()
+                .filter(s -> s.equals(id)).toList())
+        );
+        postRepository.saveAll(posts);
+    }
     public SkillCollection saveSkill(String name, String description, int level, String img){
         return skillRepository.save(new SkillCollection(name,description,level,img));
+    }
+    public SkillCollection updateSkill(String id, String name, String description, int level, String img){
+        SkillCollection skill = skillRepository.findById(id).orElseThrow();
+        skill.setName(name);
+        skill.setDescription(description);
+        skill.setLevel(level);
+        skill.setImg(img);
+        return skillRepository.save(skill);
+    }
+    public void deleteSkill(String id){
+        skillRepository.deleteById(id);
+        List<PostCollection> posts = postRepository.findAll();
+        posts = posts.stream().filter(p -> p.getSkill_id().contains(id)).toList();
+        posts.forEach(p -> p.setSkill_id(p.getSkill_id().stream()
+                .filter(s -> s.equals(id)).toList())
+        );
+        postRepository.saveAll(posts);
     }
 
     public void deletePostById(String id){

@@ -8,6 +8,12 @@
 	<meta name="viewport" content="width=device-width">
 	<title>portfolio Admin</title>
 	<style>
+		:root{
+			--c1 : #EFF5F5;
+			--c2 : #D6E4E5;
+			--c3 : #497174;
+			--c4 : #EB6440;
+		}
 		*{
 			box-sizing: border-box;
 		}
@@ -17,7 +23,7 @@
 		#mainHeader{
 			height: 50px;
 			position: relative;
-			background: #EFF5F5;
+			background: var(--c1);
 		}
 		#mainHeader>nav{
 			height: 50px;
@@ -40,12 +46,12 @@
 			margin: 0 10px;
 			font-weight: bold;
 			text-decoration: none;
-			color: #497174;
+			color: var(--c3);
 			filter: brightness(120%);
 			transition: 0.2s ease;
 		}
 		#mainHeader a:hover{
-			color: #EB6440;
+			color: var(--c4);
 		}
 		html, body{
 			height: 100%;
@@ -64,7 +70,7 @@
 		}
 		
 		#mainFooter{
-			background: #EFF5F5;
+			background: var(--c1);
 			height: 100px;
 			padding: 10px;
 		}

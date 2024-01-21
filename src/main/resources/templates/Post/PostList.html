@@ -13,7 +13,7 @@
 			display: grid;
 			grid-template-columns: calc(100% - 10rem) 10rem;
 			height: 10rem;
-			border: #497174 1px solid;
+			border: var(--c3) 1px solid;
 			align-content: center;
 			justify-content: space-between;
 			cursor: pointer;
@@ -25,7 +25,7 @@
 		}
 		.post_element > article:hover{
 			transition: 0.3s;
-			background-color: #EB6440;
+			background-color: var(--c4);
 		}
 		.thumbnail{
 			display: inline-block;
@@ -47,13 +47,13 @@
 			object-fit: cover;
 		}
 		.delete{
-			background: linear-gradient(to bottom, #497174, #EB6440);
+			background: linear-gradient(to bottom, var(--c3), var(--c4));
 			color: black;
 		}
 		.delete:hover{
 			transition: 0.3s;
-			background: linear-gradient(to bottom, #EB6440, #497174);
-			color: #EFF5F5;
+			background: linear-gradient(to bottom, var(--c4), var(--c3));
+			color: var(--c1);
 		}
 	</style>
 </head>

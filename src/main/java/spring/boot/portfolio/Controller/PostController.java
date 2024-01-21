@@ -1,5 +1,6 @@
 package spring.boot.portfolio.Controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +13,8 @@ import spring.boot.portfolio.Model.CategoryModel.PostModel.PostCollection;
 import spring.boot.portfolio.Model.CategoryModel.SkillCollection;
 import spring.boot.portfolio.Service.PostService;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.concurrent.atomic.AtomicBoolean;
@@ -61,6 +64,40 @@ public class PostController {
         model.addAttribute("SearchValue", search_value);
         return "Post/PostList";
     }
+
+    @RequestMapping("/CategoryManager")
+    public String CategoryManager(Model model){
+        List<LangCollection> Langs = postService.findLangAll();
+        List<SkillCollection> Skills = postService.findSkillAll();
+        System.out.println(Langs);
+        System.out.println(Skills);
+        model.addAttribute("Langs", Langs);
+        model.addAttribute("Skills", Skills);
+
+        return "Post/CategoryManager";
+    }
+    @RequestMapping("/LangDeleteAction")
+    public String LangDelete(String id){
+        postService.deleteLang(id);
+        System.out.println(id);
+        return "redirect:CategoryManager";
+    }
+    @RequestMapping("/LangUpdateAction")
+    public String LangUpdate(String id, String name, String img){
+        postService.updateLang(id, name, img);
+        return "redirect:CategoryManager";
+    }
+    @RequestMapping("/SkillDeleteAction")
+    public String SkillDelete(String id){
+        postService.deleteSkill(id);
+        return "redirect:CategoryManager";
+    }
+    @RequestMapping("/SkillUpdateAction")
+    public String SkillUpdate(String id, String name, String description, int level, String img){
+        postService.updateSkill(id, name, description, level,img);
+        return "redirect:CategoryManager";
+    }
+
     @RequestMapping("/PostInsertPage")
     public String PostInsertPage(Model model, String id){
         List<LangCollection> Langs = postService.findLangAll();
@@ -124,14 +161,32 @@ public class PostController {
     }
 
     @RequestMapping("/AddLang")
-    public String AddLang(String name, String img){
+    public void AddLang(String name, String img, HttpServletResponse res){
         postService.saveLang(name, img);
-        return "redirect:PostInsertPage";
+        try {
+            res.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = res.getWriter();
+            out.write("<script>" +
+                    "history.back()" +
+                    "</script>");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        //return "redirect:PostInsertPage";
     }
     @RequestMapping("/AddSkill")
-    public String AddSkill(String name, String description, int level, String img){
+    public void AddSkill(String name, String description, int level, String img,
+                         HttpServletResponse res){
         postService.saveSkill(name, description, level, img);
-        return "redirect:PostInsertPage";
+        try {
+            res.setContentType("text/html; charset=UTF-8");
+            PrintWriter out = res.getWriter();
+            out.write("<script>" +
+                    "history.back()" +
+                    "</script>");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
     @RequestMapping("/PostDeleteAction")
     public String DeletePost(String id){
