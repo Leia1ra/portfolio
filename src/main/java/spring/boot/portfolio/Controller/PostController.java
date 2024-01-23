@@ -20,7 +20,7 @@ import java.util.List;
 //import java.util.concurrent.atomic.AtomicBoolean;
 //import java.util.concurrent.atomic.AtomicInteger;
 
-@Controller @RequestMapping("/Post")
+@Controller @RequestMapping("/project")
 public class PostController {
     @Autowired
     PostService postService;
@@ -28,7 +28,7 @@ public class PostController {
 //    @Value("${app.password}")
 //    String password;
 
-    @RequestMapping("/PostList") /*@ResponseBody*/
+    @RequestMapping("/") /*@ResponseBody*/
     public String PrintList(Model model, String search_value,
                             @RequestParam(name = "post_lang", required = false)List<String> post_langs,
                             @RequestParam(name = "post_skill", required = false)List<String> post_skills){
@@ -62,10 +62,10 @@ public class PostController {
         model.addAttribute("Category_Langs", post_langs);
         model.addAttribute("Category_Skills", post_skills);
         model.addAttribute("SearchValue", search_value);
-        return "Post/PostList";
+        return "project/projectList";
     }
 
-    @RequestMapping("/CategoryManager")
+    @RequestMapping("/skillManager")
     public String CategoryManager(Model model){
         List<LangCollection> Langs = postService.findLangAll();
         List<SkillCollection> Skills = postService.findSkillAll();
@@ -74,7 +74,7 @@ public class PostController {
         model.addAttribute("Langs", Langs);
         model.addAttribute("Skills", Skills);
 
-        return "Post/CategoryManager";
+        return "project/CategoryManager";
     }
     @RequestMapping("/LangDeleteAction")
     public String LangDelete(String id){
@@ -98,7 +98,7 @@ public class PostController {
         return "redirect:CategoryManager";
     }
 
-    @RequestMapping("/PostInsertPage")
+    @RequestMapping("/projectInsertPage")
     public String PostInsertPage(Model model, String id){
         List<LangCollection> Langs = postService.findLangAll();
         List<SkillCollection> Skills = postService.findSkillAll();
@@ -106,15 +106,15 @@ public class PostController {
         model.addAttribute("Skills", Skills);
         if(id != null){
             PostCollection post = postService.findById(id);
-            model.addAttribute("PostData", post);
+            model.addAttribute("projectData", post);
 //            model.addAttribute("PostStr", ContentMode.str);
 //            model.addAttribute("PostImg", ContentMode.img);
 //            model.addAttribute("PostLink", ContentMode.link);
         }
         //카테고리 이름 모음을 만들어서, 게시글 작성 시 존재하는 카테고리에 데이터를 추가할지 새로 만들지 선택 가능하게
-        return "Post/PostInsert";
+        return "project/projectInsert";
     }
-    @RequestMapping("/PostInsertAction")
+    @RequestMapping("/projectInsertAction")
     public String PostInsertAction(String post_name,
                                    String id,
                                    String post_thumbnail,
@@ -125,7 +125,7 @@ public class PostController {
                                    @RequestParam(name = "post_skill")List<String> post_skill){
 
         if(post_lang.isEmpty() || post_skill.isEmpty() || post_thumbnail.isEmpty()){
-            return "redirect:PostInsertPage";
+            return "redirect:projectInsertPage";
         }
 //        AtomicInteger count = new AtomicInteger();
 //        List<PostContent> postContents = post_type.stream().map((t) -> {
@@ -157,7 +157,7 @@ public class PostController {
         }
 //        postService.CategoryInputPostId(postService.postSave(temp).getId(),post_category);
 
-        return "redirect:PostInsertPage";
+        return "redirect:projectInsertPage";
     }
 
     @RequestMapping("/AddLang")
@@ -188,10 +188,10 @@ public class PostController {
             throw new RuntimeException(e);
         }
     }
-    @RequestMapping("/PostDeleteAction")
+    @RequestMapping("/projectDeleteAction")
     public String DeletePost(String id){
         postService.deletePostById(id);
-        return "redirect:PostList";
+        return "redirect:";
     }
 //    @RequestMapping("/Password")
 //    public String Password(){

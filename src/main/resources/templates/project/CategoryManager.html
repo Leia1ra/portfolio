@@ -166,7 +166,7 @@
         new_skills.addEventListener('submit', (e) => {
             e.preventDefault();
             fetch("http://"+location.host
-                + "/Post/AddSkill?name=" +new_skills.name.value
+                + "/project/AddSkill?name=" +new_skills.name.value
                 +"&description="+new_skills.description.value
                 +"&level="+new_skills.level.value
                 +"&img="+new_skills.img.value
@@ -175,7 +175,7 @@
         new_langs.addEventListener('submit', (e) => {
             e.preventDefault();
             fetch("http://"+location.host
-                + "/Post/AddLang?name=" +new_langs.name.value
+                + "/project/AddLang?name=" +new_langs.name.value
                 +"&img="+new_langs.img.value
             ).then(location.reload());
         });

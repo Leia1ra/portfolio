@@ -6,23 +6,23 @@
 <!--뷰-->
 <head>
     <meta charset="UTF-8">
-    <title>PostInsertPage</title>
+    <title>ProjectInsertPage</title>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 </head>
 <body>
 <main layout:fragment="content">
     <p>게시글 안에 들어가는 썸네일 이미지는 언제나 720*720 크기의 사진이어야 합니다.</p>
-    <form action="PostInsertAction" method="get">
-        <th:block th:switch="${PostData}">
+    <form action="projectInsertAction" method="get">
+        <th:block th:switch="${projectData}">
             <label th:case="${null}">
                 <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
             </label>
             <label th:case="*">
-                <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${PostData.getName()}"/>
+                <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${projectData.getName()}"/>
             </label>
         </th:block>
-        <label th:switch="${PostData}">
+        <label th:switch="${projectData}">
             <th:block th:case="${null}">
                 <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
                     <option th:text="새로만들기" th:value="set_new"></option>
@@ -39,22 +39,22 @@
                 <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
                     <option th:text="새로만들기" th:value="set_new"></option>
                     <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                            th:selected="${PostData.getLang_id().contains(opt.getId())}"></option>
+                            th:selected="${projectData.getLang_id().contains(opt.getId())}"></option>
                 </select>
                     <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
                     <option th:text="새로만들기" th:value="set_new"></option>
                     <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                            th:selected="${PostData.getSkill_id().contains(opt.getId())}"></option>
+                            th:selected="${projectData.getSkill_id().contains(opt.getId())}"></option>
                 </select>
                 <br/>
-                <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${PostData.getThumbnail()}">
+                <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${projectData.getThumbnail()}">
             </th:block>
         </label>
         <br />
         <section id="post_elements"></section>
-        <th:block th:switch="${PostData}">
+        <th:block th:switch="${projectData}">
             <input th:case="${null}" id="post_content" type="hidden" name="post_content" />
-            <input th:case="*" id="post_content" type="hidden" name="post_content" th:value="${PostData.getContents()}"/>
+            <input th:case="*" id="post_content" type="hidden" name="post_content" th:value="${projectData.getContents()}"/>
         </th:block>
 
         <input type="submit" value="업로드">
@@ -67,7 +67,7 @@
                     let name = prompt("새로 만들 언어 이름을 정하세요");
                     let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
                     if(name !== null && img !== null){
-                        location.href = "http://"+location.host + "/Post/AddLang?name="+name+"&img="+img;
+                        location.href = "http://"+location.host + "/project/AddLang?name="+name+"&img="+img;
                     }
                 }
             });
@@ -82,7 +82,7 @@
                     let level = prompt("새로 만들 기술에 대한 당신의 실력을 레벨로 적으세요");
                     let img = prompt("새로만들 기술의 이미지를 반환하는 url을 적으세요 (사진크기는 300*300 이어야 합니다.)")
                     if(name !== "" && description !== null && level >= 0 && img !== null){
-                        location.href = "http://"+location.host + "/Post/AddSkill?name="+name+"&description="+description+"&level="+level+"&img="+img;
+                        location.href = "http://"+location.host + "/project/AddSkill?name="+name+"&description="+description+"&level="+level+"&img="+img;
                     }
                 }
             });

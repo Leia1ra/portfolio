@@ -18,6 +18,18 @@
 			justify-content: space-between;
 			cursor: pointer;
 		}
+		.new_post_element{
+			position: relative;
+			cursor: pointer;
+			height: 2.5rem;
+			border: var(--c3) 1px solid;
+			align-content: center;
+			justify-content: space-between;
+			text-align: center;
+		}
+		.new_post_name{
+			width: 100%;
+		}
 		.post_element > article{
 			width: 100%;
 			display: flex;
@@ -90,6 +102,14 @@
 		</label>
 		<input type="submit" class="search_submit" value="검색"/>
 	</form>
+	<section class="new_post_element">
+		<article>
+			<p class="new_post_name">새로 만들기</p>
+		</article>
+<!--		<nav class="delete">-->
+<!--			<span>제거</span>-->
+<!--		</nav>-->
+	</section>
 	<section th:each="opt : ${posts}" class="post_element">
 		<article>
 			<label>
@@ -128,30 +148,33 @@
 		// 	let result = Array.prototype.filter.call(post_langs.children,(lang) => lang.selected).map(l=>l.value);
 		// 	category_langs = JSON.stringify(result);
 		// 	console.log(category_langs);
-		// 	// location.href="http://"+location.host + `/Post/PostList/`
+		// 	// location.href="http://"+location.host + `/project/projectList/`
 		// 	// 		+ `&post_langs=${category_langs}&post_skills=${category_skills}`;
 		// });
 		// post_skills.addEventListener('change', (e) => {
 		// 	let result = Array.prototype.filter.call(post_skills.children,(skill) => skill.selected).map(s=>s.value);
 		// 	category_skills = JSON.stringify(result);
 		// 	console.log(category_skills);
-		// 	// location.href="http://"+location.host + `/Post/PostList/`
+		// 	// location.href="http://"+location.host + `/project/projectList/`
 		// 	// 		+ `&post_langs=${category_langs}&post_skills=${category_skills}`;
 		// });
 
 
 		const post_elements = document.querySelectorAll(".post_element");
-
 		post_elements.forEach(post => {
 			post.querySelector('article').addEventListener('click', ()=>{
-				location.href="http://"+location.host + '/Post/PostInsertPage?id='
+				location.href="http://"+location.host + '/project/projectInsertPage?id='
 						+ post.querySelector('.id').value;
 			});
 			post.querySelector(".delete").addEventListener('click', () => {
-				location.href = "http://"+location.host + '/Post/PostDeleteAction?id='
+				location.href = "http://"+location.host + '/project/projectDeleteAction?id='
 						+ post.querySelector('.id').value;
 			});
 		});
+		const new_post_element = document.querySelector('.new_post_element');
+		new_post_element.addEventListener('click', () => {
+			location.href="http://"+location.host + '/project/projectInsertPage';
+		})
 	</script>
 </main>
 </body>
