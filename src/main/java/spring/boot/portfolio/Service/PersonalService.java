@@ -44,7 +44,7 @@ public class PersonalService {
     }
 
     @Transactional
-    public void introduceDelete(String id) {
+    public void introduceDelete(String id) throws Exception{
         introductionRepository.deleteById(id);
     }
 }
