@@ -3,224 +3,24 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{fragments/layout}">
 <head>
-	<style th:unless="${exception}">
-		#header{
-			margin: 0;
-			padding-bottom: 20px;
-			border-bottom: 2px solid #497174;
-			color: #497174;
-			text-align: center;
-		}
-		section{
-			border-bottom: 2px solid #497174;
-			color: #497174;
-			padding: 20px 10px;
-		}
-		section>h2{
-			filter: brightness(120%);
-			margin: 0;
-			padding-bottom: 10px;
-			transition: 0.2s;
-		}
-		section:hover>h2{
-			color: #EB6440;
-		}
-		
-		label{
-			width: 100%;
-		}
-		input{
-			width: 100%;
-			height: 40px;
-			border-radius: 10px;
-			border: 2px solid #497174;
-			padding: 5px 10px;
-			outline: none;
-			background-color: #D6E4E5;
-			transition: 0.2s ease;
-		}
-		input:focus{
-			border: 2px solid #EB6440;
-			background-color: transparent;
-		}
-		input:hover{
-			filter:brightness(120%);
-		}
-		
-		input[type='submit'], input[type='button']{
-			border: 2px solid #497174;
-			background-color: #497174;
-			color: white;
-		}
-		input[type='submit']:hover, input[type='button']:hover{
-			filter:brightness(120%);
-			background-color: #EB6440;
-			border: 2px solid #EB6440;
-			color: white;
-		}
-		
-		#aboutMe>form {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 10px;
-		}
-		#aboutMe>form>*:nth-child(n+5){
-			grid-column: span 2;
-		}
-		
-		#link, #tag{
-			display: grid;
-			gap: 10px;
-		}
-		.siteMap, .tagList{
-			display: flex;
-			flex-direction: row-reverse;
-			gap: 10px;
-		}
-		.siteMap>*:last-child{
-			width: 25%;
-		}
-		
-		.delete{
-			border: 2px solid #497174;
-			background-color: #497174;
-			color: white;
-			height: 40px;
-			border-radius: 10px;
-			transition: 0.5s ease;
-			padding: 0;
-			flex-shrink: 0;
-			font-size: 1.25rem;
-			width: 40px;
-			overflow: hidden;
-		}
-		.delete:hover{
-			filter:brightness(120%);
-			background-color: #EB6440;
-			border: 2px solid #EB6440;
-			color: white;
-			width: 100%;
-		}
-		.delete:after{
-			content: '-';
-		}
-		.delete:hover:after{
-			font-size: 1rem;
-			content: "삭제하기";
-		}
-		.delete:hover ~ input[type="text"]{
-			display: none;
-		}
-	</style>
+	<th:block th:unless="${exception}">
+		<link rel="stylesheet" href="/style/PersonalMain.css">
+		<link rel="stylesheet" href="/style/aboutMe.css">
+		<link rel="stylesheet" th:href="@{/style/introduce.css}">
+		<script th:src="@{/script/Personal.js}"></script>
+		<script th:src="@{/script/aboutMe.js}"></script>
+		<script th:src="@{/script/Introduce.js}"></script>
+	</th:block>
 	<script th:unless="${exception}">
-		function siteKeyValue() {
-			const siteMap = document.getElementsByClassName("siteMap");
-			Array.from(siteMap).forEach((value)=>{
-				value.children.item(2).addEventListener("change", (event)=>{
-					const siteValue = event.target.value;
-					const linkValue = value.children.item(1);
-					linkValue.name = `link[${siteValue}]`
-				})
-				value.children.item(0).addEventListener("click", (event)=>{
-					const parent = event.target.parentNode;
-					parent.remove();
-				})
-			})
-		}
-		function tagListValue() {
-			const tagList = document.getElementsByClassName("tagList");
-			Array.from(tagList).forEach((value)=>{
-				value.children.item(0).addEventListener("click", (event)=>{
-					const parent = event.target.parentNode;
-					parent.remove();
-				})
-			})
-		}
-		
-		document.addEventListener("DOMContentLoaded", ()=>{
-			siteKeyValue()
-			tagListValue()
-			Array.from(document.getElementsByTagName("form")).forEach((value)=>{
-				value.addEventListener("submit", (event)=>{
-					event.preventDefault();
-				})
-			})
-		})
-		
-		function linkAppend() {
-			const link = document.getElementById("link");
-			const label = document.createElement("div");
-			label.className = "siteMap";
-			label.innerHTML = `
-				<button class="delete"></button>
-				<input type="text" class="value" name="link[]">
-				<input type="text" class="site">
-			`
-			link.appendChild(label);
-			
-			siteKeyValue();
-		}
-		
-		function tagAppend() {
-			const tag = document.getElementById("tag");
-			const label = document.createElement("div");
-			label.className = "tagList";
-			label.innerHTML = `
-				<button class="delete"></button>
-				<input type="text" name="tag">
-			`;
-			tag.appendChild(label);
-			
-			tagListValue()
-		}
-		
-		async function asyncAboutMe() {
-			const form = document.querySelector("form[action='#aboutMe']");
-			const siteMap = document.getElementsByClassName("siteMap");
-			const tagList = document.getElementsByClassName("tagList");
-			Array.from(siteMap).forEach((value)=>{
-				if(value.children.item(2).value==='' || value.children.item(1).value===''){
-					value.remove();
-				}
-			})
-			Array.from(tagList).forEach((value)=>{
-				if(value.children.item(1).value === ''){
-					value.remove();
-				}
-			})
-			
-			const formData = new FormData(form);
-			const response = await fetch('/personal/aboutMe',{
-				method:"POST",
-				headers:{
-				},
-				body:formData
-			});
-			const responseValue = await response.json();
-			
-			let message = document.getElementById("aboutMeMessage");
-			if(responseValue.result){
-				if(document.getElementById("aboutMeId") == null){
-					const idTag = document.createElement("input");
-					idTag.type = "hidden";
-					idTag.name = "id";
-					idTag.id = "aboutMeId"
-					idTag.value = responseValue.id;
-					form.appendChild(idTag);
-				}
-				message.value = "저장 성공"
-			} else {
-				message.value = "저장 실패"
-			}
-		}
+	
 	</script>
 </head>
 <main layout:fragment="content">
 	<th:block th:if="${exception}" th:insert="~{fragments/AboutMeList :: AboutMeList}"></th:block>
-	<!-- 주인장 정보-->
+	
 	<th:block th:unless="${exception}">
 		<h1 id="header">PERSONAL</h1>
-		
+		<!-- 주인장 정보 -->
 		<section id="aboutMe">
 			<h2>About Me</h2>
 			<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()" th:object="${aboutMe}">
@@ -240,7 +40,7 @@
 				<div id="link"><span>Link</span>
 					<th:block th:each="map : *{link}">
 						<div class="siteMap">
-							<button class="delete"></button>
+							<button type="button" class="delete"></button>
 							<input type="text" class="value" th:value="${map.getValue()}" th:name="'link[' + ${map.getKey()} + ']'">
 							<input type="text" class="site" th:value="${map.getKey()}">
 						</div>
@@ -252,13 +52,13 @@
 					<span>Tag</span>
 					<th:block th:each="list : *{tag}">
 						<div class="tagList">
-							<button class="delete"></button>
+							<button type="button" class="delete"></button>
 							<input type="text" name="tag" th:value="${list}">
 						</div>
 					</th:block>
 				</div>
 				<input type="button" value="태그 추가" onclick="tagAppend()">
-				<th:block th:if="*{id!=null or id !=null}">
+				<th:block th:if="*{id!=null}">
 					<input type="hidden" name="id" id="aboutMeId" th:value="*{id}">
 				</th:block>
 				<input type="submit" value="작성 완료" id="aboutMeMessage">
@@ -266,19 +66,33 @@
 		</section>
 		
 		<!-- 자기소개서 -->
-		<section>
-			<h2>Introduce</h2>
-			<form action="/personal/introduce" method="post">
-				<input type="text">
-				<input type="submit" value="작성 완료">
-			</form>
+		<section id="introduce">
+			<h2>Introduction</h2>
+			<article id="introduce-container">
+				<form action="#introduction" method="post" th:each="list, s: ${introduction}">
+					<div><span>제목</span>
+						<span class="introduction_title">
+							<button type="button" class="delete"></button>
+							<input type="text" name="field" th:value="${list.getField()}">
+						</span>
+					</div>
+					<label><span>내용</span>
+						<textarea name="content" th:text="${list.getContent()}"></textarea>
+					</label>
+					<th:block th:if="*{list.getId()!=null}">
+						<input type="hidden" name="id" th:value="*{list.getId()}">
+					</th:block>
+					<input type="submit" class="save" value="작성 완료">
+				</form>
+			</article>
+			<input type="button" value="자기소개 추가" onclick="introductionAppend()">
 		</section>
 		
 		<!-- 성장배경 -->
 		<section>
 			<h2>Growth</h2>
-			<form action="/personal/growth">
-			
+			<form action="/personal/growth" onsubmit="console.log('ㅎㅇ')">
+				<button>ㅎㅇ</button>
 			</form>
 		</section>
 		
