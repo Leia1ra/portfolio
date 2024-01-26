@@ -13,13 +13,14 @@
 <body>
 <main layout:fragment="content">
     <p>게시글 안에 들어가는 썸네일 이미지는 언제나 720*720 크기의 사진이어야 합니다.</p>
-    <form action="projectInsertAction" method="get">
+    <form action="projectInsertAction" method="post">
         <th:block th:switch="${projectData}">
             <label th:case="${null}">
                 <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
             </label>
             <label th:case="*">
                 <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${projectData.getName()}"/>
+                <input type="hidden" readonly name="id" th:value="${projectData.getId()}"/>
             </label>
         </th:block>
         <label th:switch="${projectData}">
