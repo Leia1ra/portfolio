@@ -1,0 +1,110 @@
+#header{
+    margin: 0;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--c3);
+    color: var(--c3);
+    text-align: center;
+}
+section{
+    border-bottom: 2px solid var(--c3);
+    color: var(--c3);
+    padding: 20px 10px;
+}
+section>h2{
+    filter: brightness(120%);
+    margin: 0;
+    padding-bottom: 10px;
+    transition: 0.2s;
+}
+section:hover>h2{
+    color: var(--c4);
+}
+
+label{
+    width: 100%;
+}
+input, textarea{
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid var(--c3);
+    padding: 5px 10px;
+    outline: none;
+    background-color: var(--c1);
+    transition: 0.2s ease;
+}
+input{
+    height: 40px;
+}
+textarea{
+    min-height: 100px;
+    height: fit-content;
+    resize: none;
+}
+input:focus, textarea:focus{
+    border: 2px solid var(--c4);
+    background-color: transparent;
+}
+input:hover{
+    filter:brightness(120%);
+}
+
+input[type='submit'], input[type='button']{
+    border: 2px solid var(--c3);
+    background-color: var(--c3);
+    color: white;
+}
+input[type='submit']:hover, input[type='button']:hover{
+    filter:brightness(120%);
+    background-color: var(--c4);
+    border: 2px solid var(--c4);
+    color: white;
+}
+
+
+.delete{
+    border: 2px solid var(--c3);
+    background-color: var(--c3);
+    color: white;
+    height: 100%;
+    border-radius: 10px;
+    transition: 0.5s ease;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    width: 40px;
+    overflow: hidden;
+}
+.delete:hover{
+    filter:brightness(120%);
+    background-color: var(--c4);
+    border: 2px solid var(--c4);
+    color: white;
+    width: 100%;
+}
+.delete:after{
+    content: '-';
+}
+.delete:hover:after{
+    font-size: 1rem;
+    content: "삭제하기";
+}
+.delete:hover ~ input[type="text"]{
+    display: none;
+}
+
+*[data='false'], form[data='false'] *:is(input, textarea){
+    border-radius: 10px;
+    transition: 0.3s;
+    border: 2px solid red !important;
+}
+form[data='false']{
+    padding: 10px;
+}
+input[data='false'][type='submit'], button[data='false']{
+    background-color: red !important;
+}
+input[data='false'][type='submit']:hover, button[data='false']:hover{
+    filter:brightness(120%);
+    background-color: var(--c4) !important;
+    border: 2px solid var(--c4) !important;
+}
