@@ -15,6 +15,7 @@ import spring.boot.portfolio.Service.PostService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 //import java.util.concurrent.atomic.AtomicBoolean;
@@ -121,10 +122,10 @@ public class PostController {
 //                                   @RequestParam(name = "post_type")List<String> post_type,
 //                                   @RequestParam(name = "post_content")List<String> post_content,
                                    String post_content,
-                                   @RequestParam(name = "post_lang")List<String> post_lang,
-                                   @RequestParam(name = "post_skill")List<String> post_skill){
+                                   @RequestParam(name = "post_lang" , required = false)List<String> post_lang,
+                                   @RequestParam(name = "post_skill" , required = false)List<String> post_skill){
 
-        if(post_lang.isEmpty() || post_skill.isEmpty() || post_thumbnail.isEmpty()){
+        if((post_lang.isEmpty() && post_skill.isEmpty()) || post_thumbnail.isEmpty()){
             return "redirect:projectInsertPage";
         }
 //        AtomicInteger count = new AtomicInteger();
@@ -147,6 +148,8 @@ public class PostController {
 //        }).toList();
 //        System.out.println(post_category);
 //        System.out.println(post_skill);
+        if(post_lang == null) post_lang = new ArrayList<String>();
+        if(post_skill == null) post_skill = new ArrayList<String>();
         PostCollection tempPost = new PostCollection(post_name, post_thumbnail,post_content, post_lang, post_skill);
         if(id == null)
             postService.postSave(tempPost);
