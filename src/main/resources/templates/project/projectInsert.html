@@ -9,56 +9,219 @@
     <title>ProjectInsertPage</title>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+    <style>
+        .write_form{
+            position: relative;
+            border: var(--c3) 0.15rem solid;
+            border-radius: 1rem;
+            overflow: clip;
+            padding: 1rem 1rem 4rem;
+        }
+        .post_name_label{
+            width: 100%;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-column-gap: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: var(--c3) 0.15rem solid;
+        }
+        .post_name_label > span{
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-right: var(--c3) 0.15rem solid;
+            padding-right: 1rem;
+            height: 100%;
+        }
+        #post_name{
+            width: 100%;
+            outline: none;
+            border: none;
+            border-bottom: var(--c4) 0.3rem solid;
+            font-size: 2rem;
+        }
+        .category_selects_container{
+            display: grid;
+            grid-template-columns: 7rem 7rem 10rem auto;
+            width: 100%;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: var(--c3) 0.15 solid;
+        }
+        .category_selects_container > span{
+            display: flex;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-right: var(--c3) 0.15rem solid;
+            padding-right: 1rem;
+            text-align: center;
+            align-items: center;
+            height: 100%;
+        }
+        .category_selects_container > input{
+            width: 100%;
+            outline: none;
+            border: none;
+            border-bottom: var(--c4) 0.3rem solid;
+            font-size: 1.2rem;
+            margin-left: 1rem;
+        }
+        .search_bar{
+            display: grid;
+        }
+        .category_selects{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            border: var(--c3) 0.15rem solid;
+            border-radius: 1rem;
+            overflow: clip;
+            margin-left: 0.3rem;
+        }
+        .category_selects > select{
+            border: none;
+            border-top: var(--c3) 0.15rem solid;
+            width: 100%;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;
+            outline: none;
+        }
+        .category_selects > select > option{
+            background-color: white;
+            transition: 0.3s;
+        }
+        .category_selects > select > option:hover{
+            background-color: var(--c2);
+            transition: 0.3s;
+        }
+        .category_selects > select::-webkit-scrollbar{
+            width: 0.6rem;
+        }
+        .category_selects > select::-webkit-scrollbar-thumb{
+            background-color: var(--c2);
+            width: 0.6rem;
+            border-radius: 0.8rem;
+            transition: 0.3s;
+        }
+        .category_selects > select::-webkit-scrollbar-thumb:hover{
+            background-color: var(--c3);
+            transition: 0.3s;
+        }
+        #post_elements .ProseMirror::-webkit-scrollbar,
+        #post_elements .toastui-editor-md-preview::-webkit-scrollbar{
+            width: 0.6rem;
+            cursor: pointer;
+        }
+        #post_elements .ProseMirror::-webkit-scrollbar-thumb,
+        #post_elements .toastui-editor-md-preview::-webkit-scrollbar-thumb{
+            background-color: var(--c2);
+            width: 0.6rem;
+            border-radius: 0.8rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        #post_elements .ProseMirror::-webkit-scrollbar-track,
+        #post_elements .toastui-editor-md-preview::-webkit-scrollbar-track{
+            background-color: var(--c3);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        #post_elements .ProseMirror::-webkit-scrollbar-thumb:hover,
+        #post_elements .toastui-editor-md-preview::-webkit-scrollbar-thumb:hover{
+            background-color: var(--c3);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        #post_elements .ProseMirror::-webkit-scrollbar-track:hover,
+        #post_elements .toastui-editor-md-preview::-webkit-scrollbar-track:hover{
+            background-color: var(--c2);
+            width: 0.6rem;
+            border-radius: 0.8rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        #post_elements{
+            border: var(--c3) 0.15rem solid;
+        }
+        #submit_button{
+            position: absolute;
+            right: 1rem;
+            bottom: 1rem;
+            width: calc(100% - 2rem);
+            height: 3rem;
+            border: var(--c3) 0.15rem solid;
+            border-radius: 0.3rem;
+            background-color: var(--c1);
+            font-weight: bold;
+            font-size: 1.6rem;
+            color: black;
+            transition: 0.3s;
+        }
+        #submit_button:hover{
+            background-color: var(--c4);
+            color: white;
+            transition: 0.3s;
+        }
+    </style>
 </head>
 <body>
 <main layout:fragment="content">
     <p>게시글 안에 들어가는 썸네일 이미지는 언제나 720*720 크기의 사진이어야 합니다.</p>
-    <form action="projectInsertAction" method="post">
-        <th:block th:switch="${projectData}">
-            <label th:case="${null}">
-                <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
-            </label>
-            <label th:case="*">
-                <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${projectData.getName()}"/>
-                <input type="hidden" readonly name="id" th:value="${projectData.getId()}"/>
-            </label>
-        </th:block>
-        <label th:switch="${projectData}">
-            <th:block th:case="${null}">
-                <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
-                    <option th:text="새로만들기" th:value="set_new"></option>
-                    <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
-                </select>
-                    <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
-                    <option th:text="새로만들기" th:value="set_new"></option>
-                    <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
-                </select>
-                <br/>
-                <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail">
+    <form action="projectInsertAction" method="post" class="write_form">
+        <section class="search_bar">
+            <th:block th:switch="${projectData}">
+                <label th:case="${null}" class="post_name_label">
+                    <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
+                </label>
+                <label th:case="*" class="post_name_label">
+                    <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${projectData.getName()}"/>
+                    <input type="hidden" readonly name="id" th:value="${projectData.getId()}"/>
+                </label>
             </th:block>
-            <th:block th:case="*">
-                <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
-                    <option th:text="새로만들기" th:value="set_new"></option>
-                    <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                            th:selected="${projectData.getLang_id().contains(opt.getId())}"></option>
-                </select>
-                    <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
-                    <option th:text="새로만들기" th:value="set_new"></option>
-                    <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                            th:selected="${projectData.getSkill_id().contains(opt.getId())}"></option>
-                </select>
-                <br/>
-                <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${projectData.getThumbnail()}">
-            </th:block>
-        </label>
-        <br />
+            <label th:switch="${projectData}" class="category_selects_container">
+                <th:block th:case="${null}">
+                    <article class="category_selects">
+                        <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
+                        <option th:text="새로만들기" th:value="set_new"></option>
+                        <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
+                    </select>
+                    </article>
+                    <article class="category_selects">
+                        <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
+                        <option th:text="새로만들기" th:value="set_new"></option>
+                        <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"></option>
+                    </select>
+                    </article>
+
+                    <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail">
+                </th:block>
+                <th:block th:case="*">
+                    <article class="category_selects">
+                        <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
+                        <option th:text="새로만들기" th:value="set_new"></option>
+                        <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"
+                                th:selected="${projectData.getLang_id().contains(opt.getId())}"></option>
+                    </select>
+                    </article>
+                    <article class="category_selects">
+                        <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
+                        <option th:text="새로만들기" th:value="set_new"></option>
+                        <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"
+                                th:selected="${projectData.getSkill_id().contains(opt.getId())}"></option>
+                    </select>
+                    </article>
+
+                    <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${projectData.getThumbnail()}">
+                </th:block>
+            </label>
+        </section>
+
         <section id="post_elements"></section>
         <th:block th:switch="${projectData}">
             <input th:case="${null}" id="post_content" type="hidden" name="post_content" />
             <input th:case="*" id="post_content" type="hidden" name="post_content" th:value="${projectData.getContents()}"/>
         </th:block>
 
-        <input type="submit" value="업로드">
+        <input type="submit" value="업로드" id="submit_button">
         <script>
             const select_lang = document.querySelector("#set_new_lang");
             select_lang.addEventListener("change", () => {
