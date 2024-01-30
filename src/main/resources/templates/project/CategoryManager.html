@@ -31,11 +31,20 @@
         .category_image{
             display: flex;
             flex-direction: column;
+            border: var(--c3) 0.15rem solid;
+            border-radius: 1rem;
+            overflow: clip;
         }
         .category_image > img{
             object-fit: contain;
             width: 100%;
             height: 100%;
+        }
+        .category_image > input{
+            background-color: var(--c1);
+            border: none;
+            width: calc(100% - 0.3rem);
+            margin: auto;
         }
         .name > input{
             display: inline-block;
@@ -50,6 +59,32 @@
         .delete_button, .delete_button > input, .name, .update_button, .update_button > input, .description, .description > textarea{
             display: block;
             width: 100%;
+            outline: none;
+            margin-bottom: 0.1rem;
+        }
+        .delete_button > input, .update_button > input{
+            background-color: var(--c2);
+            transition: 0.3s;
+            border-radius: 1rem;
+        }
+        .delete_button > input:hover, .update_button > input:hover{
+            background-color: var(--c4);
+            transition: 0.3s;
+        }
+        .name, .description{
+            border-left: var(--c3) 0.15rem solid;
+            border-right: var(--c3) 0.15rem solid;
+        }
+        .description>textarea, .name>input{
+            outline:none;
+            background-color: var(--c1);
+            border: none;
+            border-bottom: var(--c4) 0.15rem solid;
+            margin-top: 0.3rem;
+            border-radius: 0.5rem;
+        }
+        .description>textarea{
+            resize: vertical;
         }
     </style>
 </head>
