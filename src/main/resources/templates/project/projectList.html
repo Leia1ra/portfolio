@@ -140,6 +140,9 @@
 			background-color: white;
 			transition: 0.3s;
 		}
+    .category_selects > select > option:checked {
+        background: var(--c4);
+    }
 		.category_selects > select > option:hover{
 			background-color: var(--c2);
 			transition: 0.3s;
@@ -161,6 +164,12 @@
 			border: var(--c3) 0.15rem solid;
 			border-radius: 1rem;
 			overflow: clip;
+			width:100%;
+		}
+		.container_grid{
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-gap: 1rem;
 		}
 	</style>
 </head>
@@ -201,43 +210,81 @@
 		</label>
 		<input type="submit" class="search_submit" value="검색"/>
 	</form>
-	<section class="post_element_container">
-		<section class="new_post_element">
-			<article>
-				<p class="new_post_name">새로 만들기</p>
-			</article>
+	<section class="container_grid">
+		<section class="post_element_container">
+			<section class="new_post_element new_project_button">
+				<article>
+					<p class="new_post_name">새로 만들기</p>
+				</article>
+			</section>
+			<section th:each="opt : ${posts}" class="post_element project_element">
+				<article>
+					<label>
+						<input class="id" type="hidden" readonly  th:value="${opt.getId()}"/>
+					</label>
+					<nav class="thumbnail">
+						<img th:src="${opt.getThumbnail()}" alt="헉! 썸네일을 불러올 수 없어요!"/>
+					</nav>
+					<nav class="post_info">
+						<p class="post_name" th:text="${opt.getName()}"></p>
+						<p class="post_category">
+							<th:block th:each="ol : ${opt.getLang_id()}">
+								<th:block th:each="lang : ${Langs}">
+									<span th:if="${ol == lang.getId()}" th:text="${lang.getName()} "></span>
+								</th:block>
+							</th:block>
+							<br/>
+							<th:block th:each="os : ${opt.getSkill_id()}">
+								<th:block th:each="skill : ${Skills}">
+									<span th:if="${os == skill.getId()}" th:text="${skill.getName()} "></span>
+								</th:block>
+							</th:block>
+						</p>
+					</nav>
+				</article>
+				<nav class="delete">
+					<span>제거</span>
+				</nav>
+			</section>
 		</section>
-		<section th:each="opt : ${posts}" class="post_element">
-			<article>
-				<label>
-					<input class="id" type="hidden" readonly  th:value="${opt.getId()}"/>
-				</label>
-				<nav class="thumbnail">
-					<img th:src="${opt.getThumbnail()}" alt="헉! 썸네일을 불러올 수 없어요!"/>
-				</nav>
-				<nav class="post_info">
-					<p class="post_name" th:text="${opt.getName()}"></p>
-					<p class="post_category">
-						<th:block th:each="ol : ${opt.getLang_id()}">
-							<th:block th:each="lang : ${Langs}">
-								<span th:if="${ol == lang.getId()}" th:text="${lang.getName()} "></span>
+
+		<section class="post_element_container">
+			<section class="new_post_element new_blog_button">
+				<article>
+					<p class="new_blog_name">새로 만들기</p>
+				</article>
+			</section>
+			<section th:each="opt : ${blogs}" class="post_element blog_element">
+				<article>
+					<label>
+						<input class="id" type="hidden" readonly  th:value="${opt.getId()}"/>
+					</label>
+					<nav class="thumbnail">
+						<img th:src="${opt.getThumbnail()}" alt="헉! 썸네일을 불러올 수 없어요!"/>
+					</nav>
+					<nav class="post_info">
+						<p class="post_name" th:text="${opt.getName()}"></p>
+						<p class="post_category">
+							<th:block th:each="ol : ${opt.getLang_id()}">
+								<th:block th:each="lang : ${Langs}">
+									<span th:if="${ol == lang.getId()}" th:text="${lang.getName()} "></span>
+								</th:block>
 							</th:block>
-						</th:block>
-						<br/>
-						<th:block th:each="os : ${opt.getSkill_id()}">
-							<th:block th:each="skill : ${Skills}">
-								<span th:if="${os == skill.getId()}" th:text="${skill.getName()} "></span>
+							<br/>
+							<th:block th:each="os : ${opt.getSkill_id()}">
+								<th:block th:each="skill : ${Skills}">
+									<span th:if="${os == skill.getId()}" th:text="${skill.getName()} "></span>
+								</th:block>
 							</th:block>
-						</th:block>
-					</p>
+						</p>
+					</nav>
+				</article>
+				<nav class="delete">
+					<span>제거</span>
 				</nav>
-			</article>
-			<nav class="delete">
-				<span>제거</span>
-			</nav>
+			</section>
 		</section>
 	</section>
-
 	<script>
 		// const post_langs = document.querySelector("#set_lang");
 		// const post_skills = document.querySelector("#set_skill");
@@ -259,8 +306,9 @@
 		// });
 
 
-		const post_elements = document.querySelectorAll(".post_element");
-		post_elements.forEach(post => {
+		const project_elements = document.querySelectorAll(".project_element");
+		const blog_elements = document.querySelectorAll(".blog_element");
+		project_elements.forEach(post => {
 			post.querySelector('article').addEventListener('click', ()=>{
 				location.href="http://"+location.host + '/project/projectInsertPage?id='
 						+ post.querySelector('.id').value;
@@ -270,9 +318,23 @@
 						+ post.querySelector('.id').value;
 			});
 		});
-		const new_post_element = document.querySelector('.new_post_element');
-		new_post_element.addEventListener('click', () => {
+		blog_elements.forEach(post => {
+			post.querySelector('article').addEventListener('click', ()=>{
+				location.href="http://"+location.host + '/project/blogInsertPage?id='
+						+ post.querySelector('.id').value;
+			});
+			post.querySelector(".delete").addEventListener('click', () => {
+				location.href = "http://"+location.host + '/project/blogDeleteAction?id='
+						+ post.querySelector('.id').value;
+			});
+		});
+		const new_project_element = document.querySelector('.new_project_button');
+		new_project_element.addEventListener('click', () => {
 			location.href="http://"+location.host + '/project/projectInsertPage';
+		})
+		const new_blog_element = document.querySelector('.new_blog_button');
+		new_blog_element.addEventListener('click', () => {
+			location.href="http://"+location.host + '/project/blogInsertPage';
 		})
 	</script>
 </main>

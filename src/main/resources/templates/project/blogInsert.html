@@ -169,18 +169,18 @@
 <body>
 <main layout:fragment="content">
     <p>게시글 안에 들어가는 썸네일 이미지는 언제나 720*720 크기의 사진이어야 합니다.</p>
-    <form action="projectInsertAction" method="post" class="write_form">
+    <form action="blogInsertAction" method="post" class="write_form">
         <section class="search_bar">
-            <th:block th:switch="${projectData}">
+            <th:block th:switch="${blogData}">
                 <label th:case="${null}" class="post_name_label">
                     <span>게시글 이름</span> <input type="text" name="post_name" id="post_name"/>
                 </label>
                 <label th:case="*" class="post_name_label">
-                    <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${projectData.getName()}"/>
-                    <input type="hidden" readonly name="id" th:value="${projectData.getId()}"/>
+                    <span>게시글 이름</span> <input type="text" name="post_name" id="post_name" th:value="${blogData.getName()}"/>
+                    <input type="hidden" readonly name="id" th:value="${blogData.getId()}"/>
                 </label>
             </th:block>
-            <label th:switch="${projectData}" class="category_selects_container">
+            <label th:switch="${blogData}" class="category_selects_container">
                 <th:block th:case="${null}">
                     <article class="category_selects">
                         <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
@@ -202,29 +202,29 @@
                         <span>언어</span> <select multiple name="post_lang" id="set_new_lang">
                         <option th:text="새로만들기" th:value="set_new"></option>
                         <option th:each="opt : ${Langs}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                                th:selected="${projectData.getLang_id().contains(opt.getId())}"></option>
+                                th:selected="${blogData.getLang_id().contains(opt.getId())}"></option>
                     </select>
                     </article>
                     <article class="category_selects">
                         <span>기술</span> <select multiple name="post_skill" id="set_new_skill">
                         <option th:text="새로만들기" th:value="set_new"></option>
                         <option th:each="opt : ${Skills}" th:value="${opt.getName()}" th:text="${opt.getName()}"
-                                th:selected="${projectData.getSkill_id().contains(opt.getId())}"></option>
+                                th:selected="${blogData.getSkill_id().contains(opt.getId())}"></option>
                     </select>
                     </article>
 
-                    <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${projectData.getThumbnail()}">
+                    <span>썸네일 이미지 링크: </span><input type="text" name="post_thumbnail" th:value="${blogData.getThumbnail()}">
                 </th:block>
             </label>
         </section>
 
         <section id="post_elements"></section>
-        <th:block th:switch="${projectData}">
+        <th:block th:switch="${blogData}">
             <input th:case="${null}" id="post_content" type="hidden" name="post_content" />
-            <input th:case="*" id="post_content" type="hidden" name="post_content" th:value="${projectData.getContents()}"/>
+            <input th:case="*" id="post_content" type="hidden" name="post_content" th:value="${blogData.getContents()}"/>
         </th:block>
 
-        <input type="submit" value="프로젝트 업로드" id="submit_button">
+        <input type="submit" value="블로그 업로드" id="submit_button">
         <script>
             const select_lang = document.querySelector("#set_new_lang");
             select_lang.addEventListener("change", () => {
