@@ -58,11 +58,11 @@
 			height: 100%;
 			object-fit: cover;
 		}
-		.delete-button{
+		.delete{
 			background: linear-gradient(to bottom, var(--c3), var(--c4));
 			color: black;
 		}
-		.delete-button:hover{
+		.delete:hover{
 			transition: 0.3s;
 			background: linear-gradient(to bottom, var(--c4), var(--c3));
 			color: var(--c1);
@@ -166,7 +166,7 @@
 				location.href="http://"+location.host + '/project/projectInsertPage?id='
 						+ post.querySelector('.id').value;
 			});
-			post.querySelector(".delete-button").addEventListener('click', () => {
+			post.querySelector(".delete").addEventListener('click', () => {
 				location.href = "http://"+location.host + '/project/projectDeleteAction?id='
 						+ post.querySelector('.id').value;
 			});
