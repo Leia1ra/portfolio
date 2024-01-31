@@ -1,14 +1,10 @@
-enum state {
-	SAVE = "save",
-	DELETE = "delete"
-}
 document.addEventListener("DOMContentLoaded", function () {
 	const introduction = document.querySelector("#introduce-container") as HTMLDivElement;
 	introduction.querySelectorAll("form").forEach((value) => {
-		clickListener(value);
+		introductionProcess(value);
 	})
 })
-function clickListener(value:HTMLFormElement) {
+function introductionProcess(value:HTMLFormElement) {
 	value.addEventListener('click', function (event) {
 		const target = event.target as (HTMLInputElement | HTMLButtonElement);
 		const id = value.querySelector("input[name='id']") as (HTMLInputElement | null);
@@ -25,7 +21,7 @@ function clickListener(value:HTMLFormElement) {
 						value.remove();
 					} else {
 						value.setAttribute("data", 'false');
-						(value.querySelector(".delete") as HTMLButtonElement).setAttribute("data", 'false');
+						(value.querySelector(".delete-button") as HTMLButtonElement).setAttribute("data", 'false');
 						submit.setAttribute("data", 'false');
 						submit.value = '삭제 실패';
 					}
@@ -83,19 +79,19 @@ function introductionAppend() {
 	})
 	form.innerHTML = `
 		<div><span>제목</span>
-			<span class="introduction_title">
-				<button type="button" class="delete"></button>
+			<span class="introduction_title deletable-area">
+				<button type="button" class="delete-button"></button>
 				<input type="text" name="field">
 			</span> 
 		</div>
 		<label><span>내용</span>
 			<textarea name="content"></textarea>
 		</label>
-		<input type="submit" class="save" value="작성 완료">
+		<input type="submit" class="save-button" value="작성 완료">
 	`;
 	form.action = "#newIntroduction";
 	form.method = "post";
-	clickListener(form);
+	introductionProcess(form);
 
 	container.appendChild(form);
 }

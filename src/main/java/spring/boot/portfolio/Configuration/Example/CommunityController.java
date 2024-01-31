@@ -1,6 +1,7 @@
 package spring.boot.portfolio.Configuration.Example;
 
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ public class CommunityController {
     @RequestMapping("/")
     public String community(Model model){
         List<Community> list = service.communityList();
+
         model.addAttribute("list",list);
         return "example/community/home";
     }

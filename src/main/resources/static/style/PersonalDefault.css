@@ -9,17 +9,76 @@ section{
     border-bottom: 2px solid var(--c3);
     color: var(--c3);
     padding: 20px 10px;
+    overflow: hidden;
+    transition: 1s ease-in-out;
 }
 section>h2{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
     filter: brightness(120%);
-    margin: 0;
+    margin: 0 0 15px 0;
     padding-bottom: 10px;
     transition: 0.2s;
+    cursor: pointer;
 }
 section:hover>h2{
     color: var(--c4);
 }
 
+/* Toggle */
+section[data-state='shrink']{
+    height: 70px;
+}
+
+section[data-state='expand']{
+
+}
+section[data-state="shrink"] *:not(:first-child){
+    /*visibility: hidden;*/
+}
+section[data-state="shrink"]>h2>.menu-toggle{
+    transform: rotate(90deg);
+}
+
+section[data-state="expand"]>h2>.menu-toggle{
+    transform: rotate(0deg);
+}
+
+.menu-toggle{
+    transition: transform .75s;
+}
+.menu-toggle:before{
+    content: '>';
+}
+
+/*
+section[data-state="shrink"] .menu-toggle:hover{
+    animation: shrinkAnimation .1s ease-in-out infinite alternate;
+}
+section[data-state="expand"] .menu-toggle:hover{
+    animation: expandAnimation .1s ease-in-out infinite alternate;
+}
+@keyframes shrinkAnimation {
+    from{
+        transform: rotateZ(85deg);
+    }
+    to {
+        transform: rotateZ(95deg);
+    }
+}
+@keyframes expandAnimation {
+    from{
+        transform: rotateZ(-5deg);
+    }
+    to {
+        transform: rotateZ(5deg);
+    }
+}
+*/
+
+
+/**/
 label{
     width: 100%;
 }
@@ -48,12 +107,12 @@ input:hover{
     filter:brightness(120%);
 }
 
-input[type='submit'], input[type='button']{
+input[type='submit'], input[type='button'], button{
     border: 2px solid var(--c3);
     background-color: var(--c3);
     color: white;
 }
-input[type='submit']:hover, input[type='button']:hover{
+input[type='submit']:hover, input[type='button']:hover, button:hover{
     filter:brightness(120%);
     background-color: var(--c4);
     border: 2px solid var(--c4);
@@ -61,37 +120,7 @@ input[type='submit']:hover, input[type='button']:hover{
 }
 
 
-.delete{
-    border: 2px solid var(--c3);
-    background-color: var(--c3);
-    color: white;
-    height: 100%;
-    border-radius: 10px;
-    transition: 0.5s ease;
-    padding: 0;
-    flex-shrink: 0;
-    font-size: 1.25rem;
-    width: 40px;
-    overflow: hidden;
-}
-.delete:hover{
-    filter:brightness(120%);
-    background-color: var(--c4);
-    border: 2px solid var(--c4);
-    color: white;
-    width: 100%;
-}
-.delete:after{
-    content: '-';
-}
-.delete:hover:after{
-    font-size: 1rem;
-    content: "삭제하기";
-}
-.delete:hover ~ input[type="text"]{
-    display: none;
-}
-
+/* 삭제 실패 */
 *[data='false'], form[data='false'] *:is(input, textarea){
     border-radius: 10px;
     transition: 0.3s;
@@ -108,3 +137,4 @@ input[data='false'][type='submit']:hover, button[data='false']:hover{
     background-color: var(--c4) !important;
     border: 2px solid var(--c4) !important;
 }
+

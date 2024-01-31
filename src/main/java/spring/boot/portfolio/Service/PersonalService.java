@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.boot.portfolio.Model.AboutMeModel.AboutMeCollection;
+import spring.boot.portfolio.Model.AboutMeModel.GrowthCollection;
 import spring.boot.portfolio.Model.AboutMeModel.IntroductionCollection;
 import spring.boot.portfolio.Repository.AboutMeRepository;
 import spring.boot.portfolio.Repository.AwardRepository;
@@ -25,11 +26,14 @@ public class PersonalService {
     public List<IntroductionCollection> introduceFind() {
         return introductionRepository.findAll();
     }
+    public List<GrowthCollection> growthFind() {
+        return growthRepository.findAll();
+    }
+
 
     @Transactional
     public void aboutMeSave(AboutMeCollection ac) throws Exception {
         aboutMeRepository.save(ac);
-
     }
 
     @Transactional
@@ -40,11 +44,22 @@ public class PersonalService {
     @Transactional
     public IntroductionCollection introduceSave(IntroductionCollection ic) throws Exception {
         return introductionRepository.save(ic);
-        // if(true){throw new RuntimeException("ㅎㅇ");}
     }
 
     @Transactional
-    public void introduceDelete(String id) throws Exception{
+    public void introduceDelete(String id) throws Exception {
         introductionRepository.deleteById(id);
+        // if(true){throw new RuntimeException("ㅎㅇ");}
+    }
+
+
+    @Transactional
+    public GrowthCollection growthSave(GrowthCollection gc) throws Exception {
+        return growthRepository.save(gc);
+    }
+    @Transactional
+    public void growthDelete(String id) throws Exception {
+        growthRepository.deleteById(id);
+        // if(true){throw new RuntimeException("ㅎㅇ");}
     }
 }

@@ -4,60 +4,74 @@
       layout:decorate="~{fragments/layout}">
 <head>
 	<th:block th:unless="${exception}">
-		<link rel="stylesheet" href="/style/PersonalMain.css">
-		<link rel="stylesheet" href="/style/aboutMe.css">
-		<link rel="stylesheet" th:href="@{/style/introduce.css}">
+		<link rel="stylesheet" href="/style/PersonalDefault.css">
+		<link rel="stylesheet" href="/style/Personal.css">
 		<script th:src="@{/script/Personal.js}"></script>
 		<script th:src="@{/script/aboutMe.js}"></script>
 		<script th:src="@{/script/Introduce.js}"></script>
+		<script th:src="@{/script/growth.js}"></script>
+		<script th:src="@{/script/state.js}"></script>
 	</th:block>
 	<script th:unless="${exception}">
 	
 	</script>
 </head>
 <main layout:fragment="content">
-	<th:block th:if="${exception}" th:insert="~{fragments/AboutMeList :: AboutMeList}"></th:block>
+	<th:block th:if="${exception}" th:insert="~{fragments/AboutMeList :: AboutMeList}"/>
 	
 	<th:block th:unless="${exception}">
 		<h1 id="header">PERSONAL</h1>
 		<!-- 주인장 정보 -->
-		<section id="aboutMe">
-			<h2>About Me</h2>
-			<form action="#aboutMe" method="post" onsubmit="asyncAboutMe()" th:object="${aboutMe}">
-				<label><span>Name</span>
-					<input type="text" th:field="*{name}">
-				</label>
-				<label><span>Eng Name</span>
-					<input type="text" th:field="*{eng_name}">
-				</label>
-				<label><span>Phone</span>
-					<input type="text" th:field="*{phone}">
-				</label>
-				<label><span>Email</span>
-					<input type="text" th:field="*{email}">
-				</label>
-				
-				<div id="link"><span>Link</span>
-					<th:block th:each="map : *{link}">
-						<div class="siteMap">
-							<button type="button" class="delete"></button>
-							<input type="text" class="value" th:value="${map.getValue()}" th:name="'link[' + ${map.getKey()} + ']'">
-							<input type="text" class="site" th:value="${map.getKey()}">
+		<section id="aboutMe" data-state="expand">
+			<h2>About Me <span class="menu-toggle"></span></h2>
+			<form action="#aboutMe" onsubmit="asyncAboutMe()" th:object="${aboutMe}" enctype="multipart/form-data">
+				<figure>
+					<fieldset id="imgContainer">
+						<img id="imgPreview" th:src="*{img}">
+						<input type="file" name="imgFile" id="imgFile" onchange="imgUpLoad()"
+						       accept="image/jpeg, image/png" data-state="default">
+						<span>이미지를 변경하려면 클릭해주세요</span>
+					</fieldset>
+					<figcaption>
+						<label><span>Name</span>
+							<input type="text" th:field="*{name}">
+						</label>
+						<label><span>Eng Name</span>
+							<input type="text" th:field="*{eng_name}">
+						</label>
+						<label><span>Phone</span>
+							<input type="text" th:field="*{phone}">
+						</label>
+						<label><span>Email</span>
+							<input type="text" th:field="*{email}">
+						</label>
+						<div class="info-container">
+							<div id="tag">
+								<span>Tag</span>
+								<th:block th:each="list : *{tag}">
+									<div class="tagList deletable-area">
+										<input type="text" name="tag" th:value="${list}">
+										<button type="button" class="delete-button"></button>
+									</div>
+								</th:block>
+							</div>
+							<input type="button" value="태그 추가" onclick="tagAppend()">
 						</div>
-					</th:block>
-				</div>
-				<input type="button" value="링크 추가" onclick="linkAppend()">
-				
-				<div id="tag">
-					<span>Tag</span>
-					<th:block th:each="list : *{tag}">
-						<div class="tagList">
-							<button type="button" class="delete"></button>
-							<input type="text" name="tag" th:value="${list}">
+						<div class="info-container">
+							<div id="link"><span>Link</span>
+								<th:block th:each="map : *{link}">
+									<div class="siteMap deletable-area">
+										<input type="text" class="site" th:value="${map.getKey()}">
+										<input type="text" class="value" th:value="${map.getValue()}" th:name="'link[' + ${map.getKey()} + ']'">
+										<button type="button" class="delete-button"></button>
+									</div>
+								</th:block>
+							</div>
+							<input type="button" value="링크 추가" onclick="linkAppend()">
 						</div>
-					</th:block>
-				</div>
-				<input type="button" value="태그 추가" onclick="tagAppend()">
+					</figcaption>
+				</figure>
+				
 				<th:block th:if="*{id!=null}">
 					<input type="hidden" name="id" id="aboutMeId" th:value="*{id}">
 				</th:block>
@@ -65,14 +79,54 @@
 			</form>
 		</section>
 		
+		<!-- 성장배경 -->
+		<section data-state="shrink">
+			<h2>University & Career<span class="menu-toggle"></span></h2>
+			<article id="growth-container">
+				<form action="#growth" method="post" th:each="l : ${growth}">
+					<div class="growth-details deletable-area">
+						<label><span>시작일</span>
+							<input type="month" name="start_date" th:value="${#dates.format(l.getStart_date(),'yyyy-MM')}">
+						</label>
+						<label><span>종료일</span>
+							<input type="month" name="end_date" th:value="${#dates.format(l.getEnd_date(),'yyyy-MM')}">
+						</label>
+						<label><span>장소</span>
+							<input type="text" name="location" th:value="${l.getLocation()}">
+						</label>
+						<label><span>상세</span>
+							<input type="text" name="details" th:value="${l.getDetails()}">
+						</label>
+						<label><span>기타</span>
+							<input type="text" name="etc" th:value="${l.getEtc()}">
+						</label>
+						<button type="button" class="delete-button" data-state="delete"></button>
+					</div>
+					<th:block th:if="*{l.getId()!=null}">
+						<input type="hidden" name="id" th:value="${l.getId()}">
+					</th:block>
+					<input type="submit" class="save-button" data-state="save" value="작성 완료">
+				</form>
+			</article>
+			<input type="button" value="성장배경 추가" id="growth-append">
+		</section>
+		
+		<!-- 상훈기록 -->
+		<section data-state="shrink">
+			<h2>Award<span class="menu-toggle"></span></h2>
+			<form action="">
+			
+			</form>
+		</section>
+		
 		<!-- 자기소개서 -->
-		<section id="introduce">
-			<h2>Introduction</h2>
+		<section data-state="shrink">
+			<h2>Introduction <span class="menu-toggle"></span></h2>
 			<article id="introduce-container">
-				<form action="#introduction" method="post" th:each="list, s: ${introduction}">
+				<form action="#introduction" th:each="list, s: ${introduction}">
 					<div><span>제목</span>
-						<span class="introduction_title">
-							<button type="button" class="delete"></button>
+						<span class="introduction_title  deletable-area">
+							<button type="button" class="delete-button"></button>
 							<input type="text" name="field" th:value="${list.getField()}">
 						</span>
 					</div>
@@ -82,26 +136,10 @@
 					<th:block th:if="*{list.getId()!=null}">
 						<input type="hidden" name="id" th:value="*{list.getId()}">
 					</th:block>
-					<input type="submit" class="save" value="작성 완료">
+					<input type="submit" class="save-button" value="작성 완료">
 				</form>
 			</article>
 			<input type="button" value="자기소개 추가" onclick="introductionAppend()">
-		</section>
-		
-		<!-- 성장배경 -->
-		<section>
-			<h2>Growth</h2>
-			<form action="/personal/growth" onsubmit="console.log('ㅎㅇ')">
-				<button>ㅎㅇ</button>
-			</form>
-		</section>
-		
-		<!-- 상훈기록 -->
-		<section>
-			<h2>Award</h2>
-			<form action="">
-			
-			</form>
 		</section>
 	</th:block>
 </main>

@@ -1,0 +1,192 @@
+/* About Me*/
+#aboutMe>form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+#aboutMe>form>figure{
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+#aboutMe>form>figure>fieldset{
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: 2px solid var(--c3);
+    border-radius: 10px;
+
+    /*flex-basis: 30%;*/
+    aspect-ratio: 5/6;
+    max-height: calc(150px + 20vw);
+    min-height: 0%;
+
+    transition: 1s;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+/*@media (max-width: 800px) {
+    #aboutMe>form>figure>fieldset{
+        max-height: 250px;
+    }
+}*/
+
+#aboutMe>form>figure>fieldset>img{
+    width: 100%;
+    object-fit: cover;
+}
+#aboutMe>form>figure>fieldset>input[type='file']{
+    display: none;
+}
+#aboutMe>form>figure>fieldset>span{
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    bottom: 0;
+    opacity: 0.5;
+    font-size: 0.75rem;
+    text-align: center;
+    color: white;
+    background: black;
+    /*z-index: -1;*/
+    /*background: slategray;
+    filter: blur(0.3);*/
+}
+
+#aboutMe>form>figure>figcaption{
+    width: 100%;
+
+    height: min-content;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.info-container{
+    grid-column: span 2;
+}
+.info-container>div + input[type='button']{
+    margin-top: 5px;
+}
+
+#tag{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+}
+#tag>span{
+    grid-column: span 3;
+}
+
+
+#link{
+    display: grid;
+    gap: 10px;
+}
+.siteMap, .tagList{
+    display: flex;
+    height: 40px;
+    gap: 10px;
+}
+.siteMap>*:first-child{
+    width: 25%;
+}
+
+
+
+/* Growth*/
+#growth-container {
+    display: grid;
+    grid-gap: 10px;
+    margin-bottom: 20px;
+}
+#growth-container>form{
+    display: grid;
+    grid-gap: 5px;
+    overflow: hidden;
+    height: 70px;
+    transition: .5s;
+}
+#growth-container>form:hover{
+    height: 110px;
+}
+#growth-container .delete-button:hover{
+
+}
+
+.growth-details{
+    display: grid;
+    grid-template-columns: 7.25rem 7.25rem 1fr 1fr .75fr 40px;
+    gap: 5px;
+}
+.growth-details input:focus{
+    z-index: 0 !important;
+}
+.growth-details input{
+    padding: 5px;
+    text-align: center;
+}
+
+
+.deletable-area{
+    position: relative;
+    transition: 1s;
+}
+.deletable-area input{
+
+}
+.deletable-area input:hover{
+    position: relative;
+    z-index: 10;
+}
+.deletable-area input:focus{
+    background: white;
+    position: relative;
+    z-index: 20;
+}
+.delete-button{
+    position: absolute;
+    right: 0;
+    z-index: 1;
+
+    color: white;
+    height: 100%;
+    border-radius: 10px;
+    transition: 0.5s ease;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    width: 40px;
+    overflow: hidden;
+}
+.delete-button:after{
+    content: '-';
+}
+.delete-button:hover {
+    filter:brightness(120%);
+    background-color: var(--c4);
+    border: 2px solid var(--c4);
+    color: white;
+    width: 100%;
+}
+.delete-button:hover:after{
+    font-size: 1rem;
+    content: "삭제하기";
+}
+
+
+/* Introduction */
+#introduce-container {
+    display: grid;
+    grid-gap: 10px;
+    margin-bottom: 20px;
+}
+.introduction_title{
+    display: flex;
+    flex-direction: row-reverse;
+    height: 40px;
+    gap: 10px;
+}
