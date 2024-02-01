@@ -138,3 +138,49 @@ input[data='false'][type='submit']:hover, button[data='false']:hover{
     border: 2px solid var(--c4) !important;
 }
 
+
+.deletable-area{
+    position: relative;
+    transition: 1s;
+}
+.deletable-area input{
+
+}
+.deletable-area input:hover{
+    position: relative;
+    z-index: 10;
+}
+.deletable-area input:focus{
+    background: white;
+    position: relative;
+    z-index: 20;
+}
+.delete-button{
+    position: absolute;
+    right: 0;
+    z-index: 1;
+
+    color: white;
+    height: 100%;
+    border-radius: 10px;
+    transition: 0.5s ease;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    width: 40px;
+    overflow: hidden;
+}
+.delete-button:after{
+    content: '-';
+}
+.delete-button:hover {
+    filter:brightness(120%);
+    background-color: var(--c4);
+    border: 2px solid var(--c4);
+    color: white;
+    width: 100%;
+}
+.delete-button:hover:after{
+    font-size: 1rem;
+    content: "삭제하기";
+}

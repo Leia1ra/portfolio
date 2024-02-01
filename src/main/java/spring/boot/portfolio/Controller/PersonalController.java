@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import spring.boot.portfolio.Model.AboutMeModel.AboutMeCollection;
+import spring.boot.portfolio.Model.AboutMeModel.AwardCollection;
 import spring.boot.portfolio.Model.AboutMeModel.GrowthCollection;
 import spring.boot.portfolio.Model.AboutMeModel.IntroductionCollection;
 import spring.boot.portfolio.Service.PersonalService;
@@ -44,6 +45,7 @@ public class PersonalController {
             model.addAttribute("aboutMe", ac);
             model.addAttribute("introduction", service.introduceFind());
             model.addAttribute("growth", service.growthFind());
+            model.addAttribute("award", service.awardFind());
         }
         return "Personal/Personal";
     }
@@ -131,10 +133,38 @@ public class PersonalController {
     }
     @PostMapping(value = "/growth", params = "delete") @ResponseBody
     public Map<String, Object> growthDelete(GrowthCollection gc){
-        System.out.println(gc);
         Map<String, Object> value = new HashMap<>();
         try{
             service.growthDelete(gc.getId());
+            value.put("result", true);
+        } catch (Exception e){
+            log.info("DB Error Transaction -> {}", e.getMessage());
+            value.put("result", false);
+        }
+        return value;
+    }
+
+
+
+    @PostMapping(value = "/award", params = "save") @ResponseBody
+    public Map<String, Object> awardSave(AwardCollection ac, String date){
+        Map<String, Object> value = new HashMap<>();
+        try{
+            ac = service.awardSave(ac);
+            value.put("id", ac.getId());
+            value.put("result", true);
+        } catch (Exception e){
+            log.info("DB Error Transaction -> {}", e.getMessage());
+            value.put("result", false);
+        }
+        return value;
+    }
+    @PostMapping(value = "/award", params = "delete") @ResponseBody
+    public Map<String, Object> awardDelete(AwardCollection ac){
+        System.out.println(ac);
+        Map<String, Object> value = new HashMap<>();
+        try{
+            service.awardDelete(ac.getId());
             value.put("result", true);
         } catch (Exception e){
             log.info("DB Error Transaction -> {}", e.getMessage());

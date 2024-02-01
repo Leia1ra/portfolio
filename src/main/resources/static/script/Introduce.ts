@@ -11,11 +11,11 @@ function introductionProcess(value:HTMLFormElement) {
 		const submit = value.querySelector("input[type='submit']") as HTMLInputElement;
 
 		if(target && id) {
-			if(target.className === state.SAVE){
+			if(target.getAttribute("data-state") === state.SAVE){
 				asyncIntroduction(value, state.SAVE).then((response)=>{
 					introductionResult(value, response.result, submit);
 				});
-			} else if(target.className === state.DELETE){
+			} else if(target.getAttribute("data-state") === state.DELETE){
 				asyncIntroduction(value, state.DELETE).then((response)=>{
 					if(response.result){
 						value.remove();
@@ -28,11 +28,11 @@ function introductionProcess(value:HTMLFormElement) {
 				});
 			}
 		} else if(target && !id){
-			if(target.className === state.SAVE){
+			if(target.getAttribute("data-state") === state.SAVE){
 				asyncIntroduction(value, state.SAVE).then((response)=>{
 					introductionResult(value, response.result, submit, response.id);
 				});
-			} else if(target.className === state.DELETE){
+			} else if(target.getAttribute("data-state") === state.DELETE){
 				value.remove();
 			}
 		}
@@ -80,14 +80,14 @@ function introductionAppend() {
 	form.innerHTML = `
 		<div><span>제목</span>
 			<span class="introduction_title deletable-area">
-				<button type="button" class="delete-button"></button>
 				<input type="text" name="field">
+				<button type="button" class="delete-button" data-state="delete"></button>
 			</span> 
 		</div>
 		<label><span>내용</span>
 			<textarea name="content"></textarea>
 		</label>
-		<input type="submit" class="save-button" value="작성 완료">
+		<input type="submit" class="save-button" data-state="save" value="작성 완료">
 	`;
 	form.action = "#newIntroduction";
 	form.method = "post";

@@ -97,7 +97,7 @@
 
 
 
-/* Growth*/
+/* Growth */
 #growth-container {
     display: grid;
     grid-gap: 10px;
@@ -112,9 +112,6 @@
 }
 #growth-container>form:hover{
     height: 110px;
-}
-#growth-container .delete-button:hover{
-
 }
 
 .growth-details{
@@ -131,50 +128,26 @@
 }
 
 
-.deletable-area{
-    position: relative;
-    transition: 1s;
+/* Award */
+#award-container{
+    display: grid;
+    grid-gap: 10px;
+    margin-bottom: 20px;
 }
-.deletable-area input{
-
-}
-.deletable-area input:hover{
-    position: relative;
-    z-index: 10;
-}
-.deletable-area input:focus{
-    background: white;
-    position: relative;
-    z-index: 20;
-}
-.delete-button{
-    position: absolute;
-    right: 0;
-    z-index: 1;
-
-    color: white;
-    height: 100%;
-    border-radius: 10px;
-    transition: 0.5s ease;
-    padding: 0;
-    flex-shrink: 0;
-    font-size: 1.25rem;
-    width: 40px;
+#award-container>form{
+    display: grid;
+    grid-gap: 5px;
     overflow: hidden;
+    height: 70px;
+    transition: .5s;
 }
-.delete-button:after{
-    content: '-';
+#award-container>form:hover{
+    height: 110px;
 }
-.delete-button:hover {
-    filter:brightness(120%);
-    background-color: var(--c4);
-    border: 2px solid var(--c4);
-    color: white;
-    width: 100%;
-}
-.delete-button:hover:after{
-    font-size: 1rem;
-    content: "삭제하기";
+.award-details{
+    display: grid;
+    grid-template-columns: 10rem 1fr 1fr 1fr 40px;
+    gap: 5px;
 }
 
 
@@ -186,7 +159,7 @@
 }
 .introduction_title{
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     height: 40px;
     gap: 10px;
 }

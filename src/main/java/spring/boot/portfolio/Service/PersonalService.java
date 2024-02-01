@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.boot.portfolio.Model.AboutMeModel.AboutMeCollection;
+import spring.boot.portfolio.Model.AboutMeModel.AwardCollection;
 import spring.boot.portfolio.Model.AboutMeModel.GrowthCollection;
 import spring.boot.portfolio.Model.AboutMeModel.IntroductionCollection;
 import spring.boot.portfolio.Repository.AboutMeRepository;
@@ -29,18 +30,23 @@ public class PersonalService {
     public List<GrowthCollection> growthFind() {
         return growthRepository.findAll();
     }
+    public List<AwardCollection> awardFind() {
+        return awardRepository.findAll();
+    }
 
 
+    /* AboutMe */
     @Transactional
     public void aboutMeSave(AboutMeCollection ac) throws Exception {
         aboutMeRepository.save(ac);
     }
-
     @Transactional
     public void aboutMeExceptionSelect(String id) throws Exception{
         aboutMeRepository.deleteAllByIdNot(id);
     }
 
+
+    /* Introduction */
     @Transactional
     public IntroductionCollection introduceSave(IntroductionCollection ic) throws Exception {
         return introductionRepository.save(ic);
@@ -53,6 +59,7 @@ public class PersonalService {
     }
 
 
+    /* Growth */
     @Transactional
     public GrowthCollection growthSave(GrowthCollection gc) throws Exception {
         return growthRepository.save(gc);
@@ -60,6 +67,17 @@ public class PersonalService {
     @Transactional
     public void growthDelete(String id) throws Exception {
         growthRepository.deleteById(id);
+        // if(true){throw new RuntimeException("ㅎㅇ");}
+    }
+
+    /* Award */
+    @Transactional
+    public AwardCollection awardSave(AwardCollection gc) throws Exception {
+        return awardRepository.save(gc);
+    }
+    @Transactional
+    public void awardDelete(String id) throws Exception {
+        awardRepository.deleteById(id);
         // if(true){throw new RuntimeException("ㅎㅇ");}
     }
 }
