@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", (e)=>{
 		form.innerHTML=`
 			<div class="growth-details deletable-area">
 				<label><span>시작일</span>
-					<input type="month" name="start_date">
+					<input type="month" name="startDate">
 				</label>
 				<label><span>종료일</span>
-					<input type="month" name="end_date">
+					<input type="month" name="endDate">
 				</label>
 				<label><span>장소</span>
 					<input type="text" name="location">

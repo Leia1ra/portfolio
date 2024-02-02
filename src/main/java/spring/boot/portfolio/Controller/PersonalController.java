@@ -32,6 +32,8 @@ public class PersonalController {
     @GetMapping("/")
     public String personalHome(Model model){
         List<AboutMeCollection> aboutMeList = service.aboutMeFind();
+        System.out.println(service.growthFind());
+
         if (aboutMeList.size() > 1){
             model.addAttribute("exception", true);
             model.addAttribute("aboutMeList", aboutMeList);
@@ -67,15 +69,12 @@ public class PersonalController {
         Map<String,Object> value = new HashMap<String, Object>();
         try {
             if(file != null){
-                System.out.println("file null 아님");
-                // 이미지를 바이트 배열로 변환
                 byte[] imageBytes = file.getBytes();
                 String ext = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf(".")+1);
                 System.out.println(ext);
                 String base64Image = "data:image/" + ext + ";base64," + Base64.getEncoder().encodeToString(imageBytes);
                 ac.setImg(base64Image);
             } else {
-                System.out.println("file null임");
                 List<AboutMeCollection> a = service.aboutMeFind();
                 ac.setImg(a.getFirst().getImg());
             }
@@ -118,7 +117,7 @@ public class PersonalController {
 
     @PostMapping(value = "/growth", params = "save") @ResponseBody
     public Map<String, Object> growthSave(GrowthCollection gc){
-        System.out.println(gc);
+        System.out.println("-> "+gc);
         Map<String, Object> value = new HashMap<>();
         try{
             gc = service.growthSave(gc);
@@ -128,7 +127,6 @@ public class PersonalController {
             log.info("DB Error Transaction -> {}", e.getMessage());
             value.put("result", false);
         }
-
         return value;
     }
     @PostMapping(value = "/growth", params = "delete") @ResponseBody
@@ -161,7 +159,6 @@ public class PersonalController {
     }
     @PostMapping(value = "/award", params = "delete") @ResponseBody
     public Map<String, Object> awardDelete(AwardCollection ac){
-        System.out.println(ac);
         Map<String, Object> value = new HashMap<>();
         try{
             service.awardDelete(ac.getId());
@@ -170,7 +167,6 @@ public class PersonalController {
             log.info("DB Error Transaction -> {}", e.getMessage());
             value.put("result", false);
         }
-
         return value;
     }
 }

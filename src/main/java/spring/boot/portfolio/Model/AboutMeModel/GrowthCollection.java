@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.swing.text.DateFormatter;
@@ -23,9 +24,9 @@ public class GrowthCollection {
     @Id
     private String id;
     @DateTimeFormat(pattern = "yyyy-MM")
-    private Date start_date;
+    private Date startDate;
     @DateTimeFormat(pattern = "yyyy-MM")
-    private Date end_date;
+    private Date endDate;
     private String location;
     private String details;
     private String etc;

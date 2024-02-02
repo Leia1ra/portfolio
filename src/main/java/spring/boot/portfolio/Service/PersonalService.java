@@ -25,13 +25,13 @@ public class PersonalService {
         return aboutMeRepository.findAll();
     }
     public List<IntroductionCollection> introduceFind() {
-        return introductionRepository.findAll();
+        return introductionRepository.findAllByOrderByNoAsc();
     }
     public List<GrowthCollection> growthFind() {
-        return growthRepository.findAll();
+        return growthRepository.findAllByOrderByStartDateDesc();
     }
     public List<AwardCollection> awardFind() {
-        return awardRepository.findAll();
+        return awardRepository.findAllByOrderByDateDesc();
     }
 
 

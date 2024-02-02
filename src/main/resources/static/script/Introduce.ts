@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
 	const introduction = document.querySelector("#introduce-container") as HTMLDivElement;
+	let currentItemIndex : number;
+	let currentItem : HTMLElement;
+
 	introduction.querySelectorAll("form").forEach((value) => {
 		introductionProcess(value);
 	})
@@ -38,7 +41,6 @@ function introductionProcess(value:HTMLFormElement) {
 		}
 	})
 }
-
 async function asyncIntroduction(form: HTMLFormElement, type:state){
 	let url:string ='/personal/introduction?';
 	{	if (type == state.SAVE) url += 'save';
@@ -70,7 +72,6 @@ function introductionResult(form:HTMLFormElement,result:boolean, message:HTMLInp
 		message.value = "저장 실패";
 	}
 }
-
 function introductionAppend() {
 	const container = document.querySelector("#introduce-container")as HTMLDivElement;
 	const form = document.createElement("form");
@@ -80,12 +81,13 @@ function introductionAppend() {
 	form.innerHTML = `
 		<div><span>제목</span>
 			<span class="introduction_title deletable-area">
+				<input type="number" name="no" style="width: 40px">
 				<input type="text" name="field">
 				<button type="button" class="delete-button" data-state="delete"></button>
 			</span> 
 		</div>
 		<label><span>내용</span>
-			<textarea name="content"></textarea>
+			<textarea name="content" oninput="textAreaAutoSizing(this)"></textarea>
 		</label>
 		<input type="submit" class="save-button" data-state="save" value="작성 완료">
 	`;

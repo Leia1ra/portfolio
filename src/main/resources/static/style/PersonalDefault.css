@@ -8,7 +8,7 @@
 section{
     border-bottom: 2px solid var(--c3);
     color: var(--c3);
-    padding: 20px 10px;
+    padding: 15px 10px;
     overflow: hidden;
     transition: 1s ease-in-out;
 }
@@ -17,7 +17,7 @@ section>h2{
     justify-content: space-between;
     gap: 10px;
     filter: brightness(120%);
-    margin: 0 0 15px 0;
+    margin: 0;
     padding-bottom: 10px;
     transition: 0.2s;
     cursor: pointer;
@@ -28,14 +28,14 @@ section:hover>h2{
 
 /* Toggle */
 section[data-state='shrink']{
-    height: 70px;
+    height: 60px;
 }
 
 section[data-state='expand']{
 
 }
-section[data-state="shrink"] *:not(:first-child){
-    /*visibility: hidden;*/
+section[data-state="expand"]>h2{
+    margin-bottom: 10px;
 }
 section[data-state="shrink"]>h2>.menu-toggle{
     transform: rotate(90deg);
@@ -96,8 +96,12 @@ input{
 }
 textarea{
     min-height: 100px;
-    height: fit-content;
-    resize: none;
+    height: max-content;
+    resize: vertical;
+}
+textarea::-webkit-scrollbar{
+    z-index: 0;
+    display:none;
 }
 input:focus, textarea:focus{
     border: 2px solid var(--c4);
@@ -137,7 +141,19 @@ input[data='false'][type='submit']:hover, button[data='false']:hover{
     background-color: var(--c4) !important;
     border: 2px solid var(--c4) !important;
 }
-
+form{
+    padding: 10px 5px;
+    background: var(--c1);
+    border-radius: 10px;
+}
+input[type='number']{
+    text-align: center;
+}
+input[type='number']::-webkit-inner-spin-button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
 
 .deletable-area{
     position: relative;

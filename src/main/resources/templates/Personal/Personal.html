@@ -87,10 +87,10 @@
 				<form action="#growth" method="post" th:each="l : ${growth}">
 					<div class="growth-details deletable-area">
 						<label><span>시작일</span>
-							<input type="month" name="start_date" th:value="${#dates.format(l.getStart_date(),'yyyy-MM')}">
+							<input type="month" name="startDate" th:value="${#dates.format(l.getStartDate(),'yyyy-MM')}">
 						</label>
 						<label><span>종료일</span>
-							<input type="month" name="end_date" th:value="${#dates.format(l.getEnd_date(),'yyyy-MM')}">
+							<input type="month" name="endDate" th:value="${#dates.format(l.getEndDate(),'yyyy-MM')}">
 						</label>
 						<label><span>장소</span>
 							<input type="text" name="location" th:value="${l.getLocation()}">
@@ -148,17 +148,19 @@
 				<form action="#introduction" th:each="list, s: ${introduction}">
 					<div><span>제목</span>
 						<span class="introduction_title  deletable-area">
+							<input type="number" name="no" style="width: 40px" th:value="${list.getNo()}">
 							<input type="text" name="field" th:value="${list.getField()}">
 							<button type="button" class="delete-button" data-state="delete"></button>
 						</span>
 					</div>
-					<label><span>내용</span>
-						<textarea name="content" th:text="${list.getContent()}"></textarea>
-					</label>
+					<details open><summary>내용</summary>
+						<textarea name="content" th:text="${list.getContent()}" oninput="textAreaAutoSizing(this)"></textarea>
+					</details>
 					<th:block th:if="*{list.getId()!=null}">
 						<input type="hidden" name="id" th:value="*{list.getId()}">
 					</th:block>
 					<input type="submit" class="save-button" data-state="save" value="작성 완료">
+					<hr>
 				</form>
 			</article>
 			<input type="button" value="자기소개 추가" onclick="introductionAppend()">

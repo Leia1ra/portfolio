@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class IntroductionCollection {
     @Id
     private String id;
+    private int no;
     private String field;
     private String content;
 }

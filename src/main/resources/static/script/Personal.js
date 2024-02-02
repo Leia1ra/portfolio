@@ -22,8 +22,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
 		})
 
 	});
-
 	document.querySelector("#imgContainer").addEventListener('click', function (e){
 		e.currentTarget.querySelector("input[type='file']").click();
 	})
+
+	document.querySelectorAll("textarea").forEach((value)=>{
+		value.addEventListener("click", (e) => {
+			e.target.style.height = 'auto';
+			e.target.style.height = e.target.scrollHeight + 10 + 'px';
+		})
+	})
 })
+
+function textAreaAutoSizing(value) {
+	console.log(value.scrollHeight);
+	value.style.height = 'auto';
+	value.style.height = value.scrollHeight + 10 + 'px';
+}
