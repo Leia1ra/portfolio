@@ -11,7 +11,10 @@
 	<h1 th:utext="${msg}">ㅎㅇ</h1>
 	<a href="/thymeleaf">타임리프 실습</a>
 	<a href="/community/">커뮤니티 실습</a>
-	
+	<form action="/hi" method="get">
+		<input type="submit" value="버튼A" name="a">
+		<input type="submit" value="버튼B" name="b">
+	</form>
 	
 	<form action="/homeAction" method="get">
 		<label>

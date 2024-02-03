@@ -1,0 +1,202 @@
+#header{
+    margin: 0;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--c3);
+    color: var(--c3);
+    text-align: center;
+}
+section{
+    border-bottom: 2px solid var(--c3);
+    color: var(--c3);
+    padding: 15px 10px;
+    overflow: hidden;
+    transition: 1s ease-in-out;
+}
+section>h2{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    filter: brightness(120%);
+    margin: 0;
+    padding-bottom: 10px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+section:hover>h2{
+    color: var(--c4);
+}
+
+/* Toggle */
+section[data-state='shrink']{
+    height: 60px;
+}
+
+section[data-state='expand']{
+
+}
+section[data-state="expand"]>h2{
+    margin-bottom: 10px;
+}
+section[data-state="shrink"]>h2>.menu-toggle{
+    transform: rotate(90deg);
+}
+
+section[data-state="expand"]>h2>.menu-toggle{
+    transform: rotate(0deg);
+}
+
+.menu-toggle{
+    transition: transform .75s;
+}
+.menu-toggle:before{
+    content: '>';
+}
+
+/*
+section[data-state="shrink"] .menu-toggle:hover{
+    animation: shrinkAnimation .1s ease-in-out infinite alternate;
+}
+section[data-state="expand"] .menu-toggle:hover{
+    animation: expandAnimation .1s ease-in-out infinite alternate;
+}
+@keyframes shrinkAnimation {
+    from{
+        transform: rotateZ(85deg);
+    }
+    to {
+        transform: rotateZ(95deg);
+    }
+}
+@keyframes expandAnimation {
+    from{
+        transform: rotateZ(-5deg);
+    }
+    to {
+        transform: rotateZ(5deg);
+    }
+}
+*/
+
+
+/**/
+label{
+    width: 100%;
+}
+input, textarea{
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid var(--c3);
+    padding: 5px 10px;
+    outline: none;
+    background-color: var(--c1);
+    transition: 0.2s ease;
+}
+input{
+    height: 40px;
+}
+textarea{
+    min-height: 100px;
+    height: max-content;
+    resize: vertical;
+}
+textarea::-webkit-scrollbar{
+    z-index: 0;
+    display:none;
+}
+input:focus, textarea:focus{
+    border: 2px solid var(--c4);
+    background-color: transparent;
+}
+input:hover{
+    filter:brightness(120%);
+}
+
+input[type='submit'], input[type='button'], button{
+    border: 2px solid var(--c3);
+    background-color: var(--c3);
+    color: white;
+}
+input[type='submit']:hover, input[type='button']:hover, button:hover{
+    filter:brightness(120%);
+    background-color: var(--c4);
+    border: 2px solid var(--c4);
+    color: white;
+}
+
+
+/* 삭제 실패 */
+*[data='false'], form[data='false'] *:is(input, textarea){
+    border-radius: 10px;
+    transition: 0.3s;
+    border: 2px solid red !important;
+}
+form[data='false']{
+    padding: 10px;
+}
+input[data='false'][type='submit'], button[data='false']{
+    background-color: red !important;
+}
+input[data='false'][type='submit']:hover, button[data='false']:hover{
+    filter:brightness(120%);
+    background-color: var(--c4) !important;
+    border: 2px solid var(--c4) !important;
+}
+form{
+    padding: 10px 5px;
+    background: var(--c1);
+    border-radius: 10px;
+}
+input[type='number']{
+    text-align: center;
+}
+input[type='number']::-webkit-inner-spin-button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}
+
+.deletable-area{
+    position: relative;
+    transition: 1s;
+}
+.deletable-area input{
+
+}
+.deletable-area input:hover{
+    position: relative;
+    z-index: 10;
+}
+.deletable-area input:focus{
+    background: white;
+    position: relative;
+    z-index: 20;
+}
+.delete-button{
+    position: absolute;
+    right: 0;
+    z-index: 1;
+
+    color: white;
+    height: 100%;
+    border-radius: 10px;
+    transition: 0.5s ease;
+    padding: 0;
+    flex-shrink: 0;
+    font-size: 1.25rem;
+    width: 40px;
+    overflow: hidden;
+}
+.delete-button:after{
+    content: '-';
+}
+.delete-button:hover {
+    filter:brightness(120%);
+    background-color: var(--c4);
+    border: 2px solid var(--c4);
+    color: white;
+    width: 100%;
+}
+.delete-button:hover:after{
+    font-size: 1rem;
+    content: "삭제하기";
+}
