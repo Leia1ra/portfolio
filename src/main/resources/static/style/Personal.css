@@ -97,6 +97,14 @@
 
 
 
+section{
+    --expandHeight : 8.125rem;
+    --shrinkHeight : 5rem;
+}
+.explodeContainer:focus-within{
+    height: var(--expandHeight)!important;
+}
+
 /* Growth */
 #growth-container {
     display: grid;
@@ -107,11 +115,11 @@
     display: grid;
     grid-gap: 5px;
     overflow: hidden;
-    height: 80px;
+    height: var(--shrinkHeight);
     transition: .5s;
 }
 #growth-container>form:hover{
-    height: 130px;
+    height: var(--expandHeight);
 }
 
 .growth-details{
@@ -138,11 +146,11 @@
     display: grid;
     grid-gap: 5px;
     overflow: hidden;
-    height: 80px !important;
+    height: var(--shrinkHeight);
     transition: .5s;
 }
 #award-container>form:hover{
-    height: 130px !important;
+    height: var(--expandHeight);
 }
 .award-details{
     display: grid;

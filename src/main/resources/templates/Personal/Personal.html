@@ -84,7 +84,7 @@
 		<section data-state="shrink">
 			<h2>University & Career<span class="menu-toggle"></span></h2>
 			<article id="growth-container">
-				<form action="#growth" method="post" th:each="l : ${growth}">
+				<form action="#growth" method="post" th:each="l : ${growth}" class="explodeContainer">
 					<div class="growth-details deletable-area">
 						<label><span>시작일</span>
 							<input type="month" name="startDate" th:value="${#dates.format(l.getStartDate(),'yyyy-MM')}">
@@ -116,7 +116,7 @@
 		<section data-state="shrink">
 			<h2>Award<span class="menu-toggle"></span></h2>
 			<article id="award-container">
-				<form action="#award" th:each="l : ${award}">
+				<form action="#award" th:each="l : ${award}" class="explodeContainer">
 					<div class="award-details deletable-area">
 						<label>날짜
 							<input type="date" name="date" th:value="${#dates.format(l.getDate(),'yyyy-MM-dd')}">
